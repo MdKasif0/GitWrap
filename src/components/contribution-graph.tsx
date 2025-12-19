@@ -2,7 +2,7 @@
 
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartTooltipContent } from "@/components/ui/chart"
+import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart"
 
 type ContributionGraphProps = {
   data: Array<{ date: string; count: number }>;
@@ -38,30 +38,36 @@ export function ContributionGraph({ data }: ContributionGraphProps) {
       </CardHeader>
       <CardContent>
         <div className="h-80 w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis
-                dataKey="name"
-                stroke="hsl(var(--muted-foreground))"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-              />
-              <YAxis
-                stroke="hsl(var(--muted-foreground))"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-                tickFormatter={(value) => `${value}`}
-              />
-              <Tooltip
-                cursor={{ fill: 'hsl(var(--accent))', opacity: 0.1 }}
-                content={<ChartTooltipContent />}
-              />
-              <Bar dataKey="total" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+          <ChartContainer config={{
+            total: {
+              label: "Contributions",
+            }
+          }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis
+                  dataKey="name"
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="hsl(var(--muted-foreground))"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={(value) => `${value}`}
+                />
+                <Tooltip
+                  cursor={{ fill: 'hsl(var(--accent))', opacity: 0.1 }}
+                  content={<ChartTooltipContent />}
+                />
+                <Bar dataKey="total" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartContainer>
         </div>
       </CardContent>
     </Card>
