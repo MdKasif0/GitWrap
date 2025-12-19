@@ -1,10 +1,12 @@
 "use client";
 
-import { useFormStatus } from "react-dom";
+import { useFormStatus, useFormState } from "react-dom";
 import { handleUsernameSubmit } from "@/lib/actions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Github, LoaderCircle } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -21,10 +23,30 @@ function SubmitButton() {
   );
 }
 
+const initialState = {
+  message: "",
+};
+
 export function GithubForm() {
+  const [state, formAction] = useFormState(handleUsernameSubmit, initialState);
+  const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (state?.message) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: state.message,
+      });
+    }
+  }, [state, toast]);
+
+
   return (
     <form
-      action={handleUsernameSubmit}
+      ref={formRef}
+      action={formAction}
       className="w-full max-w-sm"
     >
       <div className="flex flex-col items-center gap-4 sm:flex-row">

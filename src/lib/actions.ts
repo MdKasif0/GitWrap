@@ -2,13 +2,17 @@
 
 import { redirect } from "next/navigation";
 
-export async function handleUsernameSubmit(formData: FormData) {
+export async function handleUsernameSubmit(prevState: any, formData: FormData) {
   const username = formData.get("username") as string;
 
   if (!username || username.trim().length === 0) {
-    // In a real app you might want to return an error state.
-    // For now, we just won't redirect.
-    return;
+     return { message: "Username cannot be empty." };
+  }
+  
+  // Validate username format (basic)
+  const githubUsernameRegex = /^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i;
+  if (!githubUsernameRegex.test(username)) {
+    return { message: "Invalid GitHub username format." };
   }
 
   redirect(`/wrapped/${username.trim()}`);
