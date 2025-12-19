@@ -27,10 +27,16 @@ const headers = {
   Accept: 'application/vnd.github.v3+json',
 };
 
-async function fetchFromGitHub(endpoint: string) {
-  const response = await fetch(`${GITHUB_API_URL}${endpoint}`, { headers });
+async function fetchFromGitHub(endpoint: string, options?: RequestInit) {
+  const response = await fetch(`${GITHUB_API_URL}${endpoint}`, {
+    headers,
+    ...options,
+  });
   if (!response.ok) {
     const errorBody = await response.json().catch(() => ({ message: response.statusText }));
+     if (response.status === 404) {
+      throw new Error(`Not Found: Could not find user data for ${endpoint}`);
+    }
     throw new Error(`GitHub API error on ${endpoint}: ${errorBody.message}`);
   }
   return response.json();
@@ -72,13 +78,15 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
     throw new Error("GitHub token is not configured. Please add it to your .env file.");
   }
   
-  const user = await fetchFromGitHub(`/users/${username}`);
+  const fetchOptions = { next: { revalidate: 600 } }; // Cache for 10 minutes
+  
+  const user = await fetchFromGitHub(`/users/${username}`, fetchOptions);
 
   // Fetch all user events for 2025
   let allEvents: any[] = [];
   let page = 1;
   while (true) {
-    const events = await fetchFromGitHub(`/users/${username}/events?per_page=100&page=${page}`);
+    const events = await fetchFromGitHub(`/users/${username}/events?per_page=100&page=${page}`, fetchOptions);
     if (!Array.isArray(events)) {
       console.warn("GitHub events API did not return an array. Stopping pagination.", events);
       break;
@@ -115,7 +123,7 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
     .flatMap((e: any) => e.payload.commits?.map((c: any) => c.message) || [])
     .slice(0, 10); // Get latest 10 commit messages
 
-  const repos = await fetchFromGitHub(`/users/${username}/repos?per_page=100&sort=updated`);
+  const repos = await fetchFromGitHub(`/users/${username}/repos?per_page=100&sort=updated`, fetchOptions);
   const repoNames = repos.map((r: any) => r.name);
   const repos2025 = repos.filter((r: any) => new Date(r.created_at).getFullYear() === 2025);
 
@@ -126,7 +134,7 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
 
   for (const repo of repos) {
     totalStars += repo.stargazers_count;
-    const repoLangs = await fetchFromGitHub(`/repos/${username}/${repo.name}/languages`);
+    const repoLangs = await fetchFromGitHub(`/repos/${username}/${repo.name}/languages`, fetchOptions);
     for (const lang in repoLangs) {
       languages[lang] = (languages[lang] || 0) + repoLangs[lang];
     }
