@@ -30,8 +30,8 @@ export function ExportCard({ data }: ExportCardProps) {
         ref={cardRef}
         className="w-full max-w-md"
       >
-        <Card className="bg-gradient-to-br from-[#0A0A50] to-[#1A142B] p-1 shadow-2xl">
-          <CardContent className="flex flex-col gap-6 rounded-lg bg-background p-6">
+        <Card className="bg-background/80 backdrop-blur-xl border-white/20 p-1 shadow-2xl">
+          <CardContent className="flex flex-col gap-6 rounded-lg bg-card/50 p-6">
             <div className="flex items-center justify-between">
               <Logo className="text-xl"/>
               <span className="font-bold text-xl text-primary">2025</span>

@@ -4,7 +4,7 @@ import { AnimatedBackground } from "@/components/animated-background";
 
 export default function Home() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-[#0A0A50] to-[#1A142B] p-4">
+    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background p-4">
       <AnimatedBackground />
       <div className="z-10 flex flex-col items-center space-y-8">
         <div className="flex flex-col items-center space-y-4">
