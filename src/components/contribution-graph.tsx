@@ -31,45 +31,35 @@ export function ContributionGraph({ data }: ContributionGraphProps) {
   });
 
   return (
-    <Card className="opacity-0 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
-      <CardHeader>
-        <CardTitle>Contributions in 2025</CardTitle>
-        <CardDescription>Your contribution activity throughout the year.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="h-80 w-full">
-          <ChartContainer config={{
-            total: {
-              label: "Contributions",
-            }
-          }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis
-                  dataKey="name"
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <YAxis
-                  stroke="hsl(var(--muted-foreground))"
-                  fontSize={12}
-                  tickLine={false}
-                  axisLine={false}
-                  tickFormatter={(value) => `${value}`}
-                />
-                <Tooltip
-                  cursor={{ fill: 'hsl(var(--accent))', opacity: 0.1 }}
-                  content={<ChartTooltipContent />}
-                />
-                <Bar dataKey="total" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </ChartContainer>
-        </div>
-      </CardContent>
-    </Card>
+    <ChartContainer config={{
+        total: {
+          label: "Contributions",
+        }
+      }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={chartData}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--muted-foreground)/.2)" />
+            <XAxis
+              dataKey="name"
+              stroke="hsl(var(--muted-foreground))"
+              fontSize={12}
+              tickLine={false}
+              axisLine={false}
+            />
+            <YAxis
+              stroke="hsl(var(--muted-foreground))"
+              fontSize={12}
+              tickLine={false}
+              axisLine={false}
+              tickFormatter={(value) => `${value}`}
+            />
+            <Tooltip
+              cursor={{ fill: 'hsl(var(--accent))', opacity: 0.1 }}
+              content={<ChartTooltipContent />}
+            />
+            <Bar dataKey="total" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </ChartContainer>
   )
 }

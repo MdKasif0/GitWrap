@@ -8,6 +8,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Download, GitCommit, GitMerge, Code } from "lucide-react"
 import type { GitHubData } from "@/lib/github-api"
 import { Logo } from "./logo"
+import html2canvas from 'html2canvas';
+
 
 type ExportCardProps = {
   data: GitHubData
@@ -18,14 +20,33 @@ export function ExportCard({ data }: ExportCardProps) {
   const { toast } = useToast()
 
   const handleDownload = () => {
-    toast({
-      title: "Feature in development",
-      description: "Image export will be available soon!",
-    })
+    if (cardRef.current) {
+        html2canvas(cardRef.current, { 
+            useCORS: true,
+            backgroundColor: null,
+            scale: 2 
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `gitwrap-${data.username}-2025.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            toast({
+                title: "Download Started",
+                description: "Your GitWrap card is being downloaded.",
+            });
+        }).catch(err => {
+            console.error("Error generating image:", err);
+            toast({
+                variant: "destructive",
+                title: "Download Failed",
+                description: "Could not generate the image. Please try again.",
+            });
+        });
+    }
   }
 
   return (
-    <div className="flex flex-col items-center gap-4 opacity-0 animate-fade-in-up" style={{ animationDelay: '800ms' }}>
+    <div className="flex flex-col items-center gap-4">
       <div
         ref={cardRef}
         className="w-full max-w-md"
