@@ -19,12 +19,21 @@ export type GitHubData = {
   reposCreated: number;
 };
 
-const MOCK_USER = {
-  name: 'Alex Doe',
-  avatarId: 'user-avatar',
+const GITHUB_API_URL = 'https://api.github.com';
+const headers = {
+  Authorization: `token ${process.env.GITHUB_TOKEN}`,
+  Accept: 'application/vnd.github.v3+json',
 };
 
-// Helper function to calculate the longest streak
+async function fetchFromGitHub(endpoint: string) {
+  const response = await fetch(`${GITHUB_API_URL}${endpoint}`, { headers });
+  if (!response.ok) {
+    const errorBody = await response.json().catch(() => ({ message: response.statusText }));
+    throw new Error(`GitHub API error on ${endpoint}: ${errorBody.message}`);
+  }
+  return response.json();
+}
+
 const getLongestStreak = (data: Array<{ date: string; count: number }>): number => {
     let longestStreak = 0;
     let currentStreak = 0;
@@ -44,7 +53,6 @@ const getLongestStreak = (data: Array<{ date: string; count: number }>): number 
     return longestStreak;
 };
 
-// Helper function to get the most productive day
 const getMostProductiveDay = (data: Array<{ date: string; count: number }>): string => {
     const dayCounts = [0, 0, 0, 0, 0, 0, 0];
     data.forEach(item => {
@@ -56,68 +64,108 @@ const getMostProductiveDay = (data: Array<{ date: string; count: number }>): str
     return days[maxDay];
 };
 
+
 export async function fetchGitHubData(username: string): Promise<GitHubData> {
-  // We'll keep the mock data for now, but expand it with the new fields
-  await new Promise(resolve => setTimeout(resolve, 2000));
-
-  if (username.toLowerCase() === 'error') {
-    throw new Error('This user loves breaking things. Failed to fetch data.');
+  if (!process.env.GITHUB_TOKEN) {
+    throw new Error("GitHub token is not configured. Please add it to your .env file.");
   }
-
-  const seed = username.toLowerCase().split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
   
-  const contributionCount = 1000 + (seed % 1500);
-  const commitCount = 2000 + (seed % 2000);
-  const languages = ['TypeScript', 'Python', 'Go', 'Rust', 'JavaScript', 'Java', 'C#', 'PHP'];
-  const mostUsedLanguage = languages[seed % languages.length];
+  const user = await fetchFromGitHub(`/users/${username}`);
 
-  const contributionData = Array.from({ length: 365 }, (_, i) => {
+  // Fetch all user events for 2025
+  let allEvents: any[] = [];
+  let page = 1;
+  while (true) {
+    const events = await fetchFromGitHub(`/users/${username}/events?per_page=100&page=${page}`);
+    const events2025 = events.filter((e: any) => new Date(e.created_at).getFullYear() === 2025);
+    allEvents.push(...events2025);
+    if (events.length < 100 || !events.some((e: any) => new Date(e.created_at).getFullYear() === 2025)) {
+      break;
+    }
+    page++;
+  }
+  
+  const contributionData: { [key: string]: { date: string, count: number } } = {};
+  for (let i = 0; i < 365; i++) {
     const d = new Date(2025, 0, 1);
     d.setDate(d.getDate() + i);
-    const dayOfWeek = d.getDay();
-    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-
-    const baseActivity = (Math.sin((i / 365) * Math.PI * 2 + seed) + 1.5) * 3;
-    const randomNoise = Math.random() * 4;
-    const weekendMultiplier = isWeekend ? 0.5 : 1.2;
-    
-    let count = Math.round(baseActivity * weekendMultiplier + randomNoise);
-    count = count < 0 ? 0 : count;
-    
-    return {
-      date: d.toISOString().split('T')[0],
-      count: count,
-    };
+    const dateString = d.toISOString().split('T')[0];
+    contributionData[dateString] = { date: dateString, count: 0 };
+  }
+  
+  allEvents.forEach(event => {
+    const date = new Date(event.created_at).toISOString().split('T')[0];
+    if (contributionData[date]) {
+      contributionData[date].count++;
+    }
   });
-  
-  const longestStreak = getLongestStreak(contributionData);
-  const mostProductiveDay = getMostProductiveDay(contributionData);
-  
-  const topLanguages = [
-    { language: mostUsedLanguage, percentage: 30 + (seed % 20) },
-    { language: languages[(seed + 1) % languages.length], percentage: 15 + (seed % 10) },
-    { language: languages[(seed + 2) % languages.length], percentage: 10 + (seed % 5) },
-    { language: languages[(seed + 3) % languages.length], percentage: 5 + (seed % 5) },
-    { language: languages[(seed + 4) % languages.length], percentage: 5 + (seed % 5) },
-  ];
 
-  const avatar = PlaceHolderImages.find(img => img.id === MOCK_USER.avatarId);
+  const contributionArray = Object.values(contributionData);
+  const contributionCount = allEvents.length;
+  
+  const pushEvents = allEvents.filter(e => e.type === 'PushEvent');
+  const commitCount = pushEvents.reduce((acc: number, e: any) => acc + (e.payload.commits?.length || 0), 0);
+
+  const repos = await fetchFromGitHub(`/users/${username}/repos?per_page=100&sort=updated`);
+  const repos2025 = repos.filter((r: any) => new Date(r.created_at).getFullYear() === 2025);
+
+  let totalStars = 0;
+  let languages: { [lang: string]: number } = {};
+  let mostCommittedRepo = '';
+  let maxCommits = 0;
+
+  for (const repo of repos) {
+    totalStars += repo.stargazers_count;
+    const repoLangs = await fetchFromGitHub(`/repos/${username}/${repo.name}/languages`);
+    for (const lang in repoLangs) {
+      languages[lang] = (languages[lang] || 0) + repoLangs[lang];
+    }
+    
+    const repoCommits = pushEvents
+      .filter((e:any) => e.repo.name === `${username}/${repo.name}`)
+      .reduce((acc: number, e: any) => acc + (e.payload.commits?.length || 0), 0);
+    
+    if (repoCommits > maxCommits) {
+        maxCommits = repoCommits;
+        mostCommittedRepo = repo.name;
+    }
+  }
+
+  const totalLangBytes = Object.values(languages).reduce((sum, bytes) => sum + bytes, 0);
+  const topLanguages = Object.entries(languages)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 5)
+    .map(([language, bytes]) => ({
+      language,
+      percentage: Math.round((bytes / totalLangBytes) * 100)
+    }));
+
+  const mostUsedLanguage = topLanguages.length > 0 ? topLanguages[0].language : 'N/A';
+  
+  const pullRequestEvents = allEvents.filter(e => e.type === 'PullRequestEvent' && e.payload.action === 'closed' && e.payload.pull_request.merged);
+  const mergedPRs = pullRequestEvents.length;
+
+  const issuesOpenedEvents = allEvents.filter(e => e.type === 'IssuesEvent' && e.payload.action === 'opened');
+  const issuesOpened = issuesOpenedEvents.length;
+  
+  const longestStreak = getLongestStreak(contributionArray);
+  const mostProductiveDay = getMostProductiveDay(contributionArray);
 
   return {
-    name: username.split(/[-_.]/).map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+    name: user.name || username,
     username,
-    avatarUrl: avatar?.imageUrl.replace('/seed/gitwrap/', `/seed/${username}/`) || `https://picsum.photos/seed/${username}/400/400`,
+    avatarUrl: user.avatar_url,
     contributionCount,
     commitCount,
     mostUsedLanguage,
-    contributionData,
-    longestStreak: longestStreak,
-    mostProductiveDay: mostProductiveDay,
-    topLanguages: topLanguages,
-    mostCommittedRepo: `${username}/project-${seed % 10}`,
-    totalStars: 50 + (seed % 150),
-    mergedPRs: 100 + (seed % 200),
-    issuesOpened: 20 + (seed % 30),
-    reposCreated: 5 + (seed % 10),
+    contributionData: contributionArray,
+    longestStreak,
+    mostProductiveDay,
+    topLanguages,
+    mostCommittedRepo,
+    totalStars,
+    mergedPRs,
+    issuesOpened,
+    reposCreated: repos2025.length,
   };
 }
