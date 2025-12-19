@@ -11,6 +11,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { WrappedCard } from "@/components/wrapped-card";
 import NumberTicker from "@/components/number-ticker";
 import { LanguageChart } from "@/components/language-chart";
+import { Card, CardContent } from "@/components/ui/card";
 
 
 export default async function WrappedPage({ params }: { params: { username: string } }) {
