@@ -1,11 +1,11 @@
 "use client";
 
-import { useFormStatus, useFormState } from "react-dom";
+import { useFormStatus } from "react-dom";
 import { handleUsernameSubmit } from "@/lib/actions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Github, LoaderCircle } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useActionState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 function SubmitButton() {
@@ -28,7 +28,7 @@ const initialState = {
 };
 
 export function GithubForm() {
-  const [state, formAction] = useFormState(handleUsernameSubmit, initialState);
+  const [state, formAction] = useActionState(handleUsernameSubmit, initialState);
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
 
