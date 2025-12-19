@@ -1,4 +1,5 @@
 
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
 import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight } from "lucide-react";
@@ -9,24 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { WrappedCard } from "@/components/wrapped-card";
 import NumberTicker from "@/components/number-ticker";
-import { Card, CardContent } from "@/components/ui/card";
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Cell } from "recharts";
+import { LanguageChart } from "@/components/language-chart";
 
-const LANGUAGE_COLORS: { [key: string]: string } = {
-  JavaScript: "#f1e05a",
-  Python: "#3572A5",
-  Java: "#b07219",
-  TypeScript: "#3178c6",
-  "C++": "#f34b7d",
-  C: "#555555",
-  Shell: "#89e051",
-  HTML: "#e34c26",
-  CSS: "#563d7c",
-  Ruby: "#701516",
-  Go: "#00ADD8",
-  PHP: "#4F5D95",
-  OTHER: "#CCCCCC",
-};
 
 export default async function WrappedPage({ params }: { params: { username: string } }) {
   const githubData = await fetchGitHubData(params.username);
@@ -96,24 +81,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
                   <Languages className="h-16 w-16 text-primary" />
                   <h2 className="mt-4 text-3xl font-bold">Language Breakdown</h2>
                   <div className="my-6 w-full h-64">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={topLangs} layout="vertical" margin={{ left: 20, right: 20 }}>
-                        <XAxis type="number" hide />
-                        <YAxis 
-                          type="category" 
-                          dataKey="language" 
-                          stroke="hsl(var(--muted-foreground))"
-                          tickLine={false}
-                          axisLine={false}
-                          tick={{ fill: 'hsl(var(--foreground))' }}
-                        />
-                        <Bar dataKey="percentage" barSize={20} radius={[0, 10, 10, 0]}>
-                          {topLangs.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={LANGUAGE_COLORS[entry.language] || LANGUAGE_COLORS.OTHER} />
-                          ))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
+                    <LanguageChart data={topLangs} />
                   </div>
                   <p className="text-lg text-foreground">Your top languages of 2025.</p>
                 </div>
