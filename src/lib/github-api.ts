@@ -17,6 +17,8 @@ export type GitHubData = {
   mergedPRs: number;
   issuesOpened: number;
   reposCreated: number;
+  repoNames: string[];
+  commitMessages: string[];
 };
 
 const GITHUB_API_URL = 'https://api.github.com';
@@ -77,6 +79,10 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
   let page = 1;
   while (true) {
     const events = await fetchFromGitHub(`/users/${username}/events?per_page=100&page=${page}`);
+    if (!Array.isArray(events)) {
+      console.warn("GitHub events API did not return an array. Stopping pagination.", events);
+      break;
+    }
     const events2025 = events.filter((e: any) => new Date(e.created_at).getFullYear() === 2025);
     allEvents.push(...events2025);
     if (events.length < 100 || !events.some((e: any) => new Date(e.created_at).getFullYear() === 2025)) {
@@ -105,8 +111,12 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
   
   const pushEvents = allEvents.filter(e => e.type === 'PushEvent');
   const commitCount = pushEvents.reduce((acc: number, e: any) => acc + (e.payload.commits?.length || 0), 0);
+  const commitMessages = pushEvents
+    .flatMap((e: any) => e.payload.commits?.map((c: any) => c.message) || [])
+    .slice(0, 10); // Get latest 10 commit messages
 
   const repos = await fetchFromGitHub(`/users/${username}/repos?per_page=100&sort=updated`);
+  const repoNames = repos.map((r: any) => r.name);
   const repos2025 = repos.filter((r: any) => new Date(r.created_at).getFullYear() === 2025);
 
   let totalStars = 0;
@@ -137,7 +147,7 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
     .slice(0, 5)
     .map(([language, bytes]) => ({
       language,
-      percentage: Math.round((bytes / totalLangBytes) * 100)
+      percentage: totalLangBytes > 0 ? Math.round((bytes / totalLangBytes) * 100) : 0
     }));
 
   const mostUsedLanguage = topLanguages.length > 0 ? topLanguages[0].language : 'N/A';
@@ -167,5 +177,7 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
     mergedPRs,
     issuesOpened,
     reposCreated: repos2025.length,
+    repoNames,
+    commitMessages
   };
 }

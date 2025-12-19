@@ -25,6 +25,8 @@ export default async function WrappedPage({ params }: { params: { username: stri
       contributionCount: githubData.contributionCount,
       mostUsedLanguage: githubData.mostUsedLanguage,
       totalCommits: githubData.commitCount,
+      commitMessages: githubData.commitMessages,
+      repos: githubData.repoNames,
     }),
   ]);
 
