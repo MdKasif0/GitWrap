@@ -79,6 +79,9 @@ const generateGitHubRoastFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await roastPrompt(input);
-    return output!;
+    if (!output) {
+      return { roast: "Looks like my AI roast generator is on a coffee break. Consider yourself spared... for now." };
+    }
+    return output;
   }
 );
