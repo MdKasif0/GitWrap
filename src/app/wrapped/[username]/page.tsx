@@ -179,10 +179,8 @@ export default async function WrappedPage({ params }: { params: { username: stri
             <CarouselItem>
                 <WrappedCard>
                     <div className="flex h-full flex-col items-center justify-center text-center">
-                        <h2 className="text-3xl font-bold">Share Your Wrap</h2>
-                        <div className="my-8 scale-90">
-                           <ExportCard data={githubData} />
-                        </div>
+                        <h2 className="text-3xl font-bold mb-8">Share Your Wrap</h2>
+                        <ExportCard data={githubData} />
                     </div>
                 </WrappedCard>
             </CarouselItem>
