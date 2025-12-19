@@ -1,3 +1,4 @@
+
 import { PlaceHolderImages } from './placeholder-images';
 
 export type GitHubData = {
@@ -8,6 +9,14 @@ export type GitHubData = {
   commitCount: number;
   mostUsedLanguage: string;
   contributionData: Array<{ date: string; count: number }>;
+  longestStreak: number;
+  mostProductiveDay: string;
+  topLanguages: { language: string, percentage: number }[];
+  mostCommittedRepo: string;
+  totalStars: number;
+  mergedPRs: number;
+  issuesOpened: number;
+  reposCreated: number;
 };
 
 const MOCK_USER = {
@@ -15,7 +24,40 @@ const MOCK_USER = {
   avatarId: 'user-avatar',
 };
 
+// Helper function to calculate the longest streak
+const getLongestStreak = (data: Array<{ date: string; count: number }>): number => {
+    let longestStreak = 0;
+    let currentStreak = 0;
+    for (const item of data) {
+        if (item.count > 0) {
+            currentStreak++;
+        } else {
+            if (currentStreak > longestStreak) {
+                longestStreak = currentStreak;
+            }
+            currentStreak = 0;
+        }
+    }
+    if (currentStreak > longestStreak) {
+        longestStreak = currentStreak;
+    }
+    return longestStreak;
+};
+
+// Helper function to get the most productive day
+const getMostProductiveDay = (data: Array<{ date: string; count: number }>): string => {
+    const dayCounts = [0, 0, 0, 0, 0, 0, 0];
+    data.forEach(item => {
+        const day = new Date(item.date).getDay();
+        dayCounts[day] += item.count;
+    });
+    const maxDay = dayCounts.indexOf(Math.max(...dayCounts));
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days[maxDay];
+};
+
 export async function fetchGitHubData(username: string): Promise<GitHubData> {
+  // We'll keep the mock data for now, but expand it with the new fields
   await new Promise(resolve => setTimeout(resolve, 2000));
 
   if (username.toLowerCase() === 'error') {
@@ -47,6 +89,17 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
       count: count,
     };
   });
+  
+  const longestStreak = getLongestStreak(contributionData);
+  const mostProductiveDay = getMostProductiveDay(contributionData);
+  
+  const topLanguages = [
+    { language: mostUsedLanguage, percentage: 30 + (seed % 20) },
+    { language: languages[(seed + 1) % languages.length], percentage: 15 + (seed % 10) },
+    { language: languages[(seed + 2) % languages.length], percentage: 10 + (seed % 5) },
+    { language: languages[(seed + 3) % languages.length], percentage: 5 + (seed % 5) },
+    { language: languages[(seed + 4) % languages.length], percentage: 5 + (seed % 5) },
+  ];
 
   const avatar = PlaceHolderImages.find(img => img.id === MOCK_USER.avatarId);
 
@@ -58,5 +111,13 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
     commitCount,
     mostUsedLanguage,
     contributionData,
+    longestStreak: longestStreak,
+    mostProductiveDay: mostProductiveDay,
+    topLanguages: topLanguages,
+    mostCommittedRepo: `${username}/project-${seed % 10}`,
+    totalStars: 50 + (seed % 150),
+    mergedPRs: 100 + (seed % 200),
+    issuesOpened: 20 + (seed % 30),
+    reposCreated: 5 + (seed % 10),
   };
 }

@@ -3,7 +3,7 @@ import { generateGitHubRoast } from "@/ai/flows/generate-github-roast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchGitHubData } from "@/lib/github-api";
-import { Award, Code, Flame, GitCommit, GitMerge, Sparkles } from "lucide-react";
+import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp } from "lucide-react";
 import { StatsCard } from "@/components/stats-card";
 import { ContributionGraph } from "@/components/contribution-graph";
 import { ExportCard } from "@/components/export-card";
@@ -51,24 +51,54 @@ export default async function WrappedPage({ params }: { params: { username: stri
           <h2 className="text-2xl font-bold text-primary">Your 2025 GitWrap is here!</h2>
         </section>
 
-        <section className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <section className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           <StatsCard
-            title="Total Contributions"
+            title="Contributions"
             value={githubData.contributionCount.toLocaleString()}
             icon={GitMerge}
             style={{ animationDelay: '100ms' }}
           />
           <StatsCard
-            title="Total Commits"
+            title="Commits"
             value={githubData.commitCount.toLocaleString()}
             icon={GitCommit}
             style={{ animationDelay: '200ms' }}
           />
           <StatsCard
-            title="Most Used Language"
+            title="Top Language"
             value={githubData.mostUsedLanguage}
             icon={Code}
             style={{ animationDelay: '300ms' }}
+          />
+          <StatsCard
+            title="Longest Streak"
+            value={`${githubData.longestStreak} days`}
+            icon={TrendingUp}
+            style={{ animationDelay: '400ms' }}
+          />
+           <StatsCard
+            title="Stars Earned"
+            value={githubData.totalStars.toLocaleString()}
+            icon={Star}
+            style={{ animationDelay: '500ms' }}
+          />
+          <StatsCard
+            title="PRs Merged"
+            value={githubData.mergedPRs.toLocaleString()}
+            icon={GitMerge}
+            style={{ animationDelay: '600ms' }}
+          />
+           <StatsCard
+            title="Issues Opened"
+            value={githubData.issuesOpened.toLocaleString()}
+            icon={Milestone}
+            style={{ animationDelay: '700ms' }}
+          />
+          <StatsCard
+            title="Productive Day"
+            value={githubData.mostProductiveDay}
+            icon={CalendarDays}
+            style={{ animationDelay: '800ms' }}
           />
         </section>
 
