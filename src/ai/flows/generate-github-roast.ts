@@ -48,7 +48,7 @@ const roastPrompt = ai.definePrompt({
   name: 'githubRoastPrompt',
   input: {schema: GenerateGitHubRoastInputSchema},
   output: {schema: GenerateGitHubRoastOutputSchema},
-  prompt: `You are a brutally honest, self-deprecating tech roast master. Based on this GitHub user's 2025 activity, generate a 2-3 line roast that is funny, savage, and technical.
+  prompt: `You are a witty and friendly tech humorist. Based on this GitHub user's 2025 activity, generate a 2-3 line light-hearted and funny roast. It should be playful and use programming humor.
 
 User Data:
 - Total commits: {{{totalCommits}}}
@@ -59,14 +59,13 @@ User Data:
 Generate a roast that:
 1. Is 2-3 lines maximum
 2. Uses programming humor and technical references
-3. Is brutally honest but playful
+3. Is playful and funny
 4. References specific patterns from their data
-5. Has a self-deprecating tone
 
 Example style:
-"343 commits but 340 were 'fixed typo' - peak engineering right there! Your Python code has more import errors than a customs office, but hey, at least you're consistent with that 3am commit schedule."`,
+"With {{{totalCommits}}} commits, you're practically paying rent on GitHub. Your main language is {{{mostUsedLanguage}}}? Nice, I hear that's the second-best language for writing 'hello world'."`,
   config: {
-    temperature: 0.9,
+    temperature: 0.8,
     maxOutputTokens: 200,
   }
 });
