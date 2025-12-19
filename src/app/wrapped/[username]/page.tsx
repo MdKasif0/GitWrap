@@ -1,5 +1,4 @@
-import { generateAchievements } from "@/ai/flows/generate-achievements";
-import { generateGitHubRoast } from "@/ai/flows/generate-github-roast";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
 import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight } from "lucide-react";
@@ -11,7 +10,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { WrappedCard } from "@/components/wrapped-card";
 import NumberTicker from "@/components/number-ticker";
 import { Card, CardContent } from "@/components/ui/card";
-import { Bar, BarChart, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Cell } from "recharts";
 
 const LANGUAGE_COLORS: { [key: string]: string } = {
   JavaScript: "#f1e05a",
@@ -32,25 +31,15 @@ const LANGUAGE_COLORS: { [key: string]: string } = {
 export default async function WrappedPage({ params }: { params: { username: string } }) {
   const githubData = await fetchGitHubData(params.username);
   
-  const [achievementsResult, roastResult] = await Promise.all([
-    generateAchievements({
-      username: githubData.username,
-      contributionCount: githubData.contributionCount,
-      mostUsedLanguage: githubData.mostUsedLanguage,
-      commitCount: githubData.commitCount,
-    }),
-    generateGitHubRoast({
-      username: githubData.username,
-      contributionCount: githubData.contributionCount,
-      mostUsedLanguage: githubData.mostUsedLanguage,
-      totalCommits: githubData.commitCount,
-      commitMessages: githubData.commitMessages,
-      repos: githubData.repoNames,
-    }),
-  ]);
+  // Temporarily hardcode AI-generated content
+  const achievements = [
+    `Code Alchemist: Mastered the art of crafting code in ${githubData.mostUsedLanguage}!`,
+    `Commitment Champion: Reached a new milestone with ${githubData.commitCount} commits!`,
+    `Contribution King/Queen: Your ${githubData.contributionCount} contributions are making a difference!`,
+    "Open Source Star: You've become a beacon in the open-source community!"
+  ];
+  const roast = `With ${githubData.commitCount} commits, you're practically paying rent on GitHub. Your main language is ${githubData.mostUsedLanguage}? Nice, I hear that's the second-best language for writing 'hello world'.`;
 
-  const { achievements } = achievementsResult;
-  const { roast } = roastResult;
 
   const topLangs = githubData.topLanguages.slice(0, 5);
 
