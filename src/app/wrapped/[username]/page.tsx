@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
-import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown, CheckCircle, GitPullRequest, Trophy, BrainCircuit, Rocket } from "lucide-react";
+import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown, CheckCircle, GitPullRequest, Trophy, BrainCircuit, Rocket, ChevronLeft } from "lucide-react";
 import { ContributionGraph } from "@/components/contribution-graph";
 import { ExportCard } from "@/components/export-card";
 import Link from "next/link";
@@ -104,7 +104,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
       </div>
       <header className="absolute top-4 left-4 z-20">
         <Button variant="ghost" asChild>
-          <Link href="/"><ArrowLeft /> Back to start</Link>
+          <Link href="/"><ChevronLeft /> Back to start</Link>
         </Button>
       </header>
       <main className="z-10 flex h-full w-full flex-col items-center">
