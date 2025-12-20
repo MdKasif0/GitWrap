@@ -12,11 +12,21 @@ import { WrappedCard } from "@/components/wrapped-card";
 import NumberTicker from "@/components/number-ticker";
 import { LanguageChart } from "@/components/language-chart";
 import { Card, CardContent } from "@/components/ui/card";
+import { generateGitHubRoast } from "@/ai/flows/generate-github-roast";
 
 
 export default async function WrappedPage({ params }: { params: { username: string } }) {
   const githubData = await fetchGitHubData(params.username);
   
+  const aiData = await generateGitHubRoast({
+    username: githubData.username,
+    contributionCount: githubData.contributionCount,
+    mostUsedLanguage: githubData.mostUsedLanguage,
+    totalCommits: githubData.commitCount,
+    commitMessages: githubData.commitMessages,
+    repos: githubData.repoNames
+  });
+
   // Temporarily hardcode AI-generated content
   const achievements = [
     `Code Alchemist: Mastered the art of crafting code in ${githubData.mostUsedLanguage}!`,
@@ -24,7 +34,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
     `Contribution King/Queen: Your ${githubData.contributionCount} contributions are making a difference!`,
     "Open Source Star: You've become a beacon in the open-source community!"
   ];
-  const roast = `With ${githubData.commitCount} commits, you're practically paying rent on GitHub. Your main language is ${githubData.mostUsedLanguage}? Nice, I hear that's the second-best language for writing 'hello world'.`;
+  const roast = aiData.roast;
 
 
   const topLangs = githubData.topLanguages.slice(0, 5);
