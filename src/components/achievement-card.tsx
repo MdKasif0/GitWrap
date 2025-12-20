@@ -27,18 +27,20 @@ const glowStyles = {
 export function AchievementCard({ icon, title, description, rarity, color }: AchievementCardProps) {
   return (
     <div className={cn(
-        "relative rounded-2xl border p-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg",
+        "relative rounded-2xl border p-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg h-full flex flex-col justify-between",
         rarityStyles[rarity],
         glowStyles[color]
     )}>
-      <div className="flex items-center gap-3 mb-2">
-        <div className="flex-shrink-0 [&>svg]:size-5">
-            {icon}
+      <div>
+        <div className="flex items-center gap-3 mb-2">
+          <div className="flex-shrink-0 [&>svg]:size-5">
+              {icon}
+          </div>
+          <h3 className="text-lg font-bold text-white">{title}</h3>
         </div>
-        <h3 className="text-lg font-bold text-white">{title}</h3>
+        <p className="text-sm text-muted-foreground">{description}</p>
       </div>
-      <p className="text-sm text-muted-foreground mb-4">{description}</p>
-      <Badge variant="outline" className={cn("absolute bottom-4 left-4 border-none text-xs", rarityStyles[rarity])}>
+      <Badge variant="outline" className={cn("mt-4 border-none text-xs w-min", rarityStyles[rarity])}>
         {rarity}
       </Badge>
     </div>

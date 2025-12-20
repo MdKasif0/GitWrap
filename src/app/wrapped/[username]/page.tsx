@@ -4,6 +4,7 @@
 
 
 
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
 import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown, CheckCircle, GitPullRequest, Trophy, BrainCircuit, Rocket, ChevronLeft, ChevronRight, GitFork, Users } from "lucide-react";
@@ -34,42 +35,28 @@ export default async function WrappedPage({ params }: { params: { username: stri
     {
       icon: <Trophy className="text-yellow-400" />,
       title: 'Open Source Titan',
-      description: 'Contributed to 50+ projects, including TensorFlow and Kubernetes. A true legend.',
+      description: 'Contributed to 50+ projects, a true legend.',
       rarity: 'Legendary',
       color: 'yellow'
     },
     {
       icon: <Flame className="text-purple-400" />,
       title: 'Commit Streak Master',
-      description: 'Achieved a 365-day commit streak. Your dedication is unmatched!',
+      description: 'Achieved a 365-day commit streak!',
       rarity: 'Epic',
       color: 'purple'
     },
     {
       icon: <BrainCircuit className="text-blue-400" />,
       title: 'Language Polyglot',
-      description: 'Code in 10+ different languages. You speak the language of innovation.',
+      description: 'Coded in 10+ different languages this year.',
       rarity: 'Rare',
       color: 'blue'
     },
     {
       icon: <GitPullRequest className="text-gray-400" />,
       title: 'Pull Request Pro',
-      description: "Merged 200+ pull requests this year. You're a collaboration expert.",
-      rarity: 'Common',
-      color: 'gray'
-    },
-    {
-      icon: <Rocket className="text-blue-400" />,
-      title: 'Early Adopter',
-      description: 'Used 5+ new GitHub features in their beta phase. Always ahead of the curve.',
-      rarity: 'Rare',
-      color: 'blue'
-    },
-    {
-      icon: <Sparkles className="text-gray-400" />,
-      title: 'Star Gazer',
-      description: 'Starred 1,000+ repositories. You have an eye for great code.',
+      description: "Merged 200+ pull requests.",
       rarity: 'Common',
       color: 'gray'
     },
