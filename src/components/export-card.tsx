@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Download, GitCommit, GitMerge, Code, Share2, Link as LinkIcon, Twitter, Star, GitPullRequest, Github } from "lucide-react"
+import { Download, GitCommit, Code, Share2, Link as LinkIcon, Twitter, Star, Github } from "lucide-react"
 import type { GitHubData } from "@/lib/github-api"
 import { Logo } from "./logo"
 import html2canvas from 'html2canvas';
@@ -142,10 +142,10 @@ export function ExportCard({ data, roast, isModalVersion = false }: ExportCardPr
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <GitPullRequest className="h-5 w-5 text-green-400" />
+                <GitCommit className="h-5 w-5 text-green-400" />
                  <div className="text-left">
-                  <p className="font-bold text-lg text-white">{data.mergedPRs.toLocaleString()}</p>
-                  <p className="text-xs text-muted-foreground">PRs Merged</p>
+                  <p className="font-bold text-lg text-white">{data.commitCount.toLocaleString()}</p>
+                  <p className="text-xs text-muted-foreground">Total Commits</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
