@@ -2,12 +2,14 @@
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { useRef } from "react";
 
 type HeatmapProps = {
   data: { date: string; count: number }[];
 };
 
 export function ContributionHeatmap({ data }: HeatmapProps) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const startDate = new Date('2025-01-01T00:00:00.000Z');
   
   const values = data.reduce((acc, d) => {
@@ -60,19 +62,31 @@ export function ContributionHeatmap({ data }: HeatmapProps) {
   ];
 
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      // If there is horizontal overflow, stop the event from bubbling up
+      if (container.scrollWidth > container.clientWidth) {
+        e.stopPropagation();
+      }
+    }
+  };
 
   return (
      <TooltipProvider>
-      <div className="flex w-full justify-center rounded-lg border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+      <div className="flex w-full justify-center rounded-lg border border-white/10 bg-white/5 p-4 backdrop-blur-sm"
+           onWheel={handleWheel}
+      >
         <div className="flex w-full gap-3">
             <div className="flex flex-col gap-1 text-xs text-muted-foreground pt-6 shrink-0">
                 {weekDays.map((day, i) => (
                     <div key={i} className="h-3 leading-3" style={{ visibility: i % 2 === 1 ? 'visible' : 'hidden'}}>{day}</div>
                 ))}
             </div>
-            <div className="w-full overflow-x-auto">
+            <div ref={scrollContainerRef} className="w-full overflow-x-auto">
                 <div className="flex flex-col gap-2" style={{ minWidth: '620px' }}>
-                    <div className="flex justify-between text-xs text-muted-foreground">
+                    <div className="flex justify-around text-xs text-muted-foreground">
                         <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
                     </div>
                     <div className="flex gap-1">
