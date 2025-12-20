@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
-import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown, CheckCircle, GitPullRequest, Trophy, BrainCircuit, Rocket, ChevronLeft } from "lucide-react";
+import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown, CheckCircle, GitPullRequest, Trophy, BrainCircuit, Rocket, ChevronLeft, ChevronRight } from "lucide-react";
 import { ContributionGraph } from "@/components/contribution-graph";
 import { ExportCard } from "@/components/export-card";
 import Link from "next/link";
@@ -127,9 +127,10 @@ export default async function WrappedPage({ params }: { params: { username: stri
                         </h1>
                         <p className="mt-2 text-lg text-muted-foreground">Your year in code, unwrapped.</p>
                     </div>
-                    <div className="flex flex-col items-center gap-1 text-sm text-muted-foreground mt-24">
-                       <p>SWIPE OR PRESS &rarr; TO CONTINUE</p>
-                       <ChevronDown className="animate-bounce" />
+                    <div className="flex items-center gap-1 text-sm text-muted-foreground mt-24">
+                       <p>SWIPE OR PRESS</p>
+                       <ChevronRight /> 
+                       <p>TO CONTINUE</p>
                     </div>
                 </div>
               </WrappedCard>
