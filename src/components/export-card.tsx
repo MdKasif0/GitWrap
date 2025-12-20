@@ -21,7 +21,6 @@ export function ExportCard({ data, roast, isModalVersion = false }: ExportCardPr
   const cardRef = useRef<HTMLDivElement>(null)
   const { toast } = useToast()
   const [isProcessing, setIsProcessing] = useState(false);
-  const seriousness = ((data.commitCount / (data.contributionCount || 1)) * 500).toFixed(0);
 
   const generateImage = async (): Promise<{ dataUrl: string, blob: Blob } | null> => {
     if (!cardRef.current) return null;
@@ -132,35 +131,6 @@ export function ExportCard({ data, roast, isModalVersion = false }: ExportCardPr
               </div>
             </div>
             
-            <div className="relative flex items-center justify-center w-36 h-36">
-                <svg className="absolute inset-0" viewBox="0 0 100 100" >
-                    <defs>
-                        <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#A855F7" />
-                        <stop offset="100%" stopColor="#EC4899" />
-                        </linearGradient>
-                    </defs>
-                    <circle
-                        cx="50" cy="50" r="45"
-                        fill="none" stroke="hsl(var(--muted) / 0.3)" strokeWidth="8"
-                    />
-                    <circle
-                        cx="50" cy="50" r="45"
-                        fill="none" stroke="url(#progressGradient)" strokeWidth="8"
-                        strokeDasharray={2 * Math.PI * 45}
-                        strokeDashoffset={2 * Math.PI * 45 * (1 - Math.min(parseInt(seriousness), 1000) / 1000)}
-                        strokeLinecap="round"
-                        transform="rotate(-90 50 50)"
-                    />
-                </svg>
-                <div className="flex flex-col items-center">
-                    <span className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-purple-400 to-pink-400">
-                        {seriousness}
-                    </span>
-                    <span className="text-sm text-muted-foreground">/ 1000</span>
-                </div>
-            </div>
-
             <p className="text-base text-muted-foreground italic">"{roast}"</p>
 
             <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-center w-full">
