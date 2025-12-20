@@ -15,7 +15,7 @@ function SubmitButton() {
     <Button 
       type="submit" 
       disabled={pending} 
-      className="shrink-0 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] px-8 text-lg font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/50"
+      className="shrink-0 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] px-8 text-lg font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/50 w-full sm:w-auto"
       size="lg"
     >
       {pending ? (
@@ -54,12 +54,12 @@ export function GithubForm() {
       action={formAction}
       className="w-full max-w-2xl"
     >
-      <div className="flex w-full items-center gap-4 rounded-full bg-white/10 p-2 text-white shadow-lg backdrop-blur-lg border border-white/20 focus-within:border-white/50 transition-all duration-300">
+      <div className="flex flex-col sm:flex-row w-full items-center gap-4 rounded-full bg-white/10 p-2 text-white shadow-lg backdrop-blur-lg border border-white/20 focus-within:border-white/50 transition-all duration-300">
         <Input
           name="username"
           type="text"
           placeholder="Enter GitHub Username"
-          className="h-12 flex-grow border-none bg-transparent pl-4 text-lg text-white placeholder:text-white/50 focus-visible:ring-0"
+          className="h-12 w-full flex-grow border-none bg-transparent pl-4 text-lg text-white placeholder:text-white/50 focus-visible:ring-0"
           required
           autoFocus
         />
