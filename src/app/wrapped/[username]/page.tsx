@@ -1,13 +1,7 @@
 
-
-
-
-
-
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
-import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown } from "lucide-react";
+import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown, CheckCircle, GitPullRequest } from "lucide-react";
 import { ContributionGraph } from "@/components/contribution-graph";
 import { ExportCard } from "@/components/export-card";
 import Link from "next/link";
@@ -16,7 +10,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { WrappedCard } from "@/components/wrapped-card";
 import NumberTicker from "@/components/number-ticker";
 import { LanguageChart, LANGUAGE_COLORS } from "@/components/language-chart";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { generateGitHubRoast } from "@/ai/flows/generate-github-roast";
 import { GiftIcon } from "@/components/icons/gift-icon";
 import { Badge } from "@/components/ui/badge";
@@ -26,8 +20,15 @@ import { ContributionHeatmap } from "@/components/contribution-heatmap";
 export default async function WrappedPage({ params }: { params: { username: string } }) {
   const githubData = await fetchGitHubData(params.username);
   
-  // Temporarily hardcode AI-generated content to avoid rate limiting
-  const roast = `With ${githubData.commitCount} commits, you're practically paying rent on GitHub. Your main language is ${githubData.mostUsedLanguage}? Nice, I hear that's the second-best language for writing 'hello world'.`;
+  const roastData = {
+    username: githubData.username,
+    contributionCount: githubData.contributionCount,
+    mostUsedLanguage: githubData.mostUsedLanguage,
+    totalCommits: githubData.commitCount,
+    commitMessages: githubData.commitMessages,
+    repos: githubData.repoNames
+  };
+  const { roast } = await generateGitHubRoast(roastData);
   
   const achievements = [
     `Code Alchemist: Mastered the art of crafting code in ${githubData.mostUsedLanguage}!`,
@@ -214,30 +215,34 @@ export default async function WrappedPage({ params }: { params: { username: stri
             
             {/* Card 5: Repository Highlights */}
             <CarouselItem className="h-full">
-              <WrappedCard>
-                <div className="flex h-full flex-col items-center justify-center gap-6 text-center">
-                  <Github className="h-16 w-16 text-primary" />
-                  <h2 className="text-3xl font-bold">Repository Highlights</h2>
-                  <div className="grid grid-cols-2 gap-x-8 gap-y-6">
-                    <div className="text-center">
-                      <p className="text-5xl font-black text-white"><NumberTicker value={githubData.totalStars} /></p>
+              <WrappedCard className="flex flex-col items-center justify-center p-6 text-center">
+                <h2 className="text-4xl font-bold mb-8">Repository Highlights</h2>
+                  <p className="max-w-xl text-lg text-muted-foreground mb-8">
+                    Your impact on open source was electric this year. Here's the code that defined your 2025 journey.
+                  </p>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-4xl">
+                  <Card className="bg-card/50 text-center flex flex-col justify-center items-center p-6">
+                      <Star className="size-10 text-primary mb-4"/>
+                      <p className="text-4xl font-black text-white"><NumberTicker value={githubData.totalStars} /></p>
                       <p className="text-lg text-muted-foreground">Stars Earned</p>
-                    </div>
-                     <div className="text-center">
-                      <p className="text-5xl font-black text-white"><NumberTicker value={githubData.reposCreated} /></p>
-                      <p className="text-lg text-muted-foreground">Repos Created</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-5xl font-black text-white"><NumberTicker value={githubData.mergedPRs} /></p>
+                  </Card>
+                   <Card className="bg-card/50 text-center flex flex-col justify-center items-center p-6">
+                      <Github className="size-10 text-primary mb-4"/>
+                      <p className="text-4xl font-black text-white"><NumberTicker value={githubData.reposCreated} /></p>
+                      <p className="text-lg text-muted-foreground">New Repos</p>
+                  </Card>
+                  <Card className="bg-card/50 text-center flex flex-col justify-center items-center p-6">
+                      <GitPullRequest className="size-10 text-primary mb-4"/>
+                      <p className="text-4xl font-black text-white"><NumberTicker value={githubData.mergedPRs} /></p>
                       <p className="text-lg text-muted-foreground">PRs Merged</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-5xl font-black text-white"><NumberTicker value={githubData.issuesOpened} /></p>
-                      <p className="text-lg text-muted-foreground">Issues Opened</p>
-                    </div>
-                  </div>
-                  <p className="text-lg text-foreground mt-4">Top Repo: <span className="font-bold text-primary">{githubData.mostCommittedRepo || 'N/A'}</span></p>
+                  </Card>
+                  <Card className="bg-card/50 text-center flex flex-col justify-center items-center p-6">
+                      <CheckCircle className="size-10 text-primary mb-4"/>
+                      <p className="text-4xl font-black text-white"><NumberTicker value={githubData.issuesOpened} /></p>
+                      <p className="text-lg text-muted-foreground">Issues Solved</p>
+                  </Card>
                 </div>
+                 <p className="text-lg text-foreground mt-8">Your most committed repo: <span className="font-bold text-primary">{githubData.mostCommittedRepo || 'N/A'}</span></p>
               </WrappedCard>
             </CarouselItem>
 
@@ -309,7 +314,3 @@ export default async function WrappedPage({ params }: { params: { username: stri
     </div>
   );
 }
-
-
-
-
