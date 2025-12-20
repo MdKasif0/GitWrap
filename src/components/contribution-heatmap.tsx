@@ -9,8 +9,7 @@ type HeatmapProps = {
 
 export function ContributionHeatmap({ data }: HeatmapProps) {
   const startDate = new Date('2025-01-01T00:00:00.000Z');
-  const endDate = new Date('2025-12-31T00:00:00.000Z');
-
+  
   const values = data.reduce((acc, d) => {
     acc[d.date] = d.count;
     return acc;
@@ -64,45 +63,47 @@ export function ContributionHeatmap({ data }: HeatmapProps) {
 
   return (
      <TooltipProvider>
-      <div className="flex gap-2 rounded-lg border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-        <div className="flex flex-col gap-1 text-xs text-muted-foreground pt-6">
-            {weekDays.map((day, i) => (
-                <div key={i} className="h-3 leading-3" style={{ visibility: i % 2 === 1 ? 'visible' : 'hidden'}}>{day}</div>
-            ))}
-        </div>
-        <div className="flex flex-col gap-2">
-            <div className="flex justify-around text-xs text-muted-foreground">
-                <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
-            </div>
-            <div className="flex gap-1 overflow-hidden">
-            {weeks.map((week, weekIndex) => (
-                <div key={weekIndex} className="grid grid-rows-7 gap-1">
-                {week.map((day, dayIndex) => {
-                    if (day.level === -1) {
-                        return <div key={dayIndex} className="size-3 rounded-sm bg-transparent" />;
-                    }
-                    return (
-                    <Tooltip key={dayIndex} delayDuration={100}>
-                        <TooltipTrigger asChild>
-                        <div className={cn("size-3 rounded-sm", levelColors[day.level])} />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                        <p className="text-sm font-bold">
-                            {day.count} contributions on {new Date(day.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-                        </p>
-                        </TooltipContent>
-                    </Tooltip>
-                    );
-                })}
-                </div>
-            ))}
-            </div>
-             <div className="flex justify-end items-center gap-1 text-xs text-muted-foreground mt-1">
-                <span>Less</span>
-                {levelColors.map((color, i) => (
-                <div key={i} className={cn("size-3 rounded-sm", color)} />
+      <div className="flex w-full justify-center rounded-lg border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
+        <div className="flex w-full gap-2">
+            <div className="flex flex-col gap-1 text-xs text-muted-foreground pt-6">
+                {weekDays.map((day, i) => (
+                    <div key={i} className="h-3 leading-3" style={{ visibility: i % 2 === 1 ? 'visible' : 'hidden'}}>{day}</div>
                 ))}
-                <span>More</span>
+            </div>
+            <div className="flex w-full flex-col gap-2 overflow-x-auto">
+                <div className="flex justify-between text-xs text-muted-foreground" style={{ minWidth: '600px' }}>
+                    <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+                </div>
+                <div className="flex gap-1">
+                {weeks.map((week, weekIndex) => (
+                    <div key={weekIndex} className="grid grid-rows-7 gap-1">
+                    {week.map((day, dayIndex) => {
+                        if (day.level === -1) {
+                            return <div key={dayIndex} className="size-3 rounded-sm bg-transparent" />;
+                        }
+                        return (
+                        <Tooltip key={dayIndex} delayDuration={100}>
+                            <TooltipTrigger asChild>
+                            <div className={cn("size-3 rounded-sm", levelColors[day.level])} />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                            <p className="text-sm font-bold">
+                                {day.count} contributions on {new Date(day.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
+                            </p>
+                            </TooltipContent>
+                        </Tooltip>
+                        );
+                    })}
+                    </div>
+                ))}
+                </div>
+                 <div className="flex justify-end items-center gap-1 text-xs text-muted-foreground mt-1">
+                    <span>Less</span>
+                    {levelColors.map((color, i) => (
+                    <div key={i} className={cn("size-3 rounded-sm", color)} />
+                    ))}
+                    <span>More</span>
+                </div>
             </div>
         </div>
       </div>
