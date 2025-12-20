@@ -65,11 +65,15 @@ export function ContributionHeatmap({ data }: HeatmapProps) {
   
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     const container = scrollContainerRef.current;
-    if (container) {
-      // If there is horizontal overflow, stop the event from bubbling up
-      if (container.scrollWidth > container.clientWidth) {
-        e.stopPropagation();
+    if (container && container.scrollWidth > container.clientWidth) {
+      // If there's horizontal overflow, we handle the scroll and stop it from bubbling.
+      const isHorizontalScroll = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+      if (!isHorizontalScroll) {
+         // Allow vertical scroll to pass through if it's not a horizontal gesture
+         return;
       }
+      
+      e.stopPropagation();
     }
   };
 
