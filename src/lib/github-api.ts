@@ -1,4 +1,5 @@
 
+
 import { PlaceHolderImages } from './placeholder-images';
 
 export type GitHubData = {
@@ -11,6 +12,7 @@ export type GitHubData = {
   contributionData: Array<{ date: string; count: number }>;
   longestStreak: number;
   mostProductiveDay: string;
+  bestMonth: string;
   topLanguages: { language: string, percentage: number }[];
   mostCommittedRepo: string;
   totalStars: number;
@@ -70,6 +72,27 @@ const getMostProductiveDay = (data: Array<{ date: string; count: number }>): str
     const maxDay = dayCounts.indexOf(Math.max(...dayCounts));
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     return days[maxDay];
+};
+
+const getBestMonth = (data: Array<{ date: string; count: number }>): string => {
+    const monthCounts: { [key: string]: number } = {};
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    data.forEach(item => {
+        const month = new Date(item.date).getMonth();
+        const monthName = months[month];
+        monthCounts[monthName] = (monthCounts[monthName] || 0) + item.count;
+    });
+
+    let bestMonth = '';
+    let maxCount = 0;
+    for (const month in monthCounts) {
+        if (monthCounts[month] > maxCount) {
+            maxCount = monthCounts[month];
+            bestMonth = month;
+        }
+    }
+    return bestMonth;
 };
 
 
@@ -168,6 +191,7 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
   
   const longestStreak = getLongestStreak(contributionArray);
   const mostProductiveDay = getMostProductiveDay(contributionArray);
+  const bestMonth = getBestMonth(contributionArray);
 
   return {
     name: user.name || username,
@@ -179,6 +203,7 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
     contributionData: contributionArray,
     longestStreak,
     mostProductiveDay,
+    bestMonth,
     topLanguages,
     mostCommittedRepo,
     totalStars,
@@ -189,3 +214,4 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
     commitMessages
   };
 }
+

@@ -1,6 +1,7 @@
 
 
 
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
 import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown } from "lucide-react";
@@ -71,20 +72,34 @@ export default async function WrappedPage({ params }: { params: { username: stri
 
             {/* Card 2: Commit Overview */}
             <CarouselItem>
-              <WrappedCard>
-                <div className="flex h-full flex-col items-center justify-center text-center">
-                  <GitCommit className="h-16 w-16 text-primary" />
-                  <h2 className="mt-4 text-3xl font-bold">Commit Overview</h2>
-                  <div className="my-8">
-                    <p className="text-8xl font-black text-white">
-                      <NumberTicker value={githubData.commitCount} />
-                    </p>
-                    <p className="text-2xl text-muted-foreground">Total Commits</p>
+               <WrappedCard className="flex flex-col justify-between items-center text-center p-8">
+                 <div className="absolute top-0 left-0 w-full h-full bg-[url('/circuit-board.svg')] bg-cover opacity-5 mix-blend-lighten z-0" />
+                 <div className="z-10">
+                   <h2 className="text-2xl text-muted-foreground">In 2025, you made</h2>
+                   <p
+                     className="my-2 text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-300 via-cyan-300 to-yellow-300"
+                     style={{
+                       textShadow: '0 0 10px hsl(var(--primary)/0.5), 0 0 20px hsl(var(--primary)/0.3)',
+                     }}
+                   >
+                     <NumberTicker value={githubData.commitCount} />
+                   </p>
+                   <p className="text-6xl font-bold text-white/90">commits</p>
+
+                   <div className="mt-6 space-y-1 text-lg">
+                      <p>That's <span className="font-bold text-white">{(githubData.commitCount / 365).toFixed(1)} per day</span> on average!</p>
+                      <p>Your best month? <span className="font-bold text-primary">{githubData.bestMonth} 🔥</span></p>
+                   </div>
+                 </div>
+
+                 <div className="w-full h-48 z-10 mt-auto">
+                    <ContributionGraph 
+                      data={githubData.contributionData} 
+                      bestMonth={githubData.bestMonth}
+                    />
                   </div>
-                  <p className="text-lg text-foreground">That's a lot of code!</p>
-                </div>
-              </WrappedCard>
-            </CarouselItem>
+               </WrappedCard>
+             </CarouselItem>
 
              {/* Card 3: Language Breakdown */}
             <CarouselItem>
@@ -222,3 +237,4 @@ export default async function WrappedPage({ params }: { params: { username: stri
     </div>
   );
 }
+
