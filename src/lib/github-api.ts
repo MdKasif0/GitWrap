@@ -1,5 +1,6 @@
 
 
+
 import { PlaceHolderImages } from './placeholder-images';
 
 export type GitHubData = {
@@ -46,29 +47,49 @@ async function fetchFromGitHub(endpoint: string, options?: RequestInit) {
   return response.json();
 }
 
+async function fetchFromGitHubGraphQL(query: string, variables: Record<string, any>) {
+  const response = await fetch('https://api.github.com/graphql', {
+    method: 'POST',
+    headers: {
+      Authorization: `bearer ${process.env.GITHUB_TOKEN}`,
+    },
+    body: JSON.stringify({ query, variables }),
+  });
+  if (!response.ok) {
+    const errorBody = await response.json().catch(() => ({ message: response.statusText }));
+    throw new Error(`GitHub GraphQL API error: ${errorBody.message}`);
+  }
+  return response.json();
+}
+
+
 const getLongestStreak = (data: Array<{ date: string; count: number }>): number => {
     let longestStreak = 0;
     let currentStreak = 0;
-    for (const item of data) {
-        if (item.count > 0) {
+    // Create a set of dates with contributions for quick lookups
+    const contributionDates = new Set(data.filter(d => d.count > 0).map(d => d.date));
+    
+    const startDate = new Date('2025-01-01');
+    for (let i = 0; i < 365; i++) {
+        const currentDate = new Date(startDate);
+        currentDate.setDate(startDate.getDate() + i);
+        const dateString = currentDate.toISOString().split('T')[0];
+
+        if (contributionDates.has(dateString)) {
             currentStreak++;
         } else {
-            if (currentStreak > longestStreak) {
-                longestStreak = currentStreak;
-            }
+            longestStreak = Math.max(longestStreak, currentStreak);
             currentStreak = 0;
         }
     }
-    if (currentStreak > longestStreak) {
-        longestStreak = currentStreak;
-    }
+    longestStreak = Math.max(longestStreak, currentStreak);
     return longestStreak;
 };
 
 const getMostProductiveDay = (data: Array<{ date: string; count: number }>): string => {
     const dayCounts = [0, 0, 0, 0, 0, 0, 0];
     data.forEach(item => {
-        const day = new Date(item.date).getDay();
+        const day = new Date(item.date).getUTCDay();
         dayCounts[day] += item.count;
     });
     const maxDay = dayCounts.indexOf(Math.max(...dayCounts));
@@ -81,7 +102,7 @@ const getBestMonth = (data: Array<{ date: string; count: number }>): string => {
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     
     data.forEach(item => {
-        const month = new Date(item.date).getMonth();
+        const month = new Date(item.date).getUTCMonth();
         const monthName = months[month];
         monthCounts[monthName] = (monthCounts[monthName] || 0) + item.count;
     });
@@ -103,78 +124,104 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
     throw new Error("GitHub token is not configured. Please add it to your .env file.");
   }
   
-  const fetchOptions = { next: { revalidate: 600 } }; // Cache for 10 minutes
-  
-  const user = await fetchFromGitHub(`/users/${username}`, fetchOptions);
+  const fromDate = "2025-01-01T00:00:00Z";
+  const toDate = "2025-12-31T23:59:59Z";
 
-  // Fetch all user events for 2025
-  let allEvents: any[] = [];
-  let page = 1;
-  while (true) {
-    const events = await fetchFromGitHub(`/users/${username}/events?per_page=100&page=${page}`, fetchOptions);
-    if (!Array.isArray(events)) {
-      console.warn("GitHub events API did not return an array. Stopping pagination.", events);
-      break;
+  const contributionsQuery = `
+    query($username: String!, $from: DateTime!, $to: DateTime!) {
+      user(login: $username) {
+        name
+        avatarUrl
+        followers {
+          totalCount
+        }
+        contributionsCollection(from: $from, to: $to) {
+          contributionCalendar {
+            totalContributions
+            weeks {
+              contributionDays {
+                date
+                contributionCount
+              }
+            }
+          }
+          totalCommitContributions
+          totalPullRequestContributions
+          totalIssueContributions
+          popularPullRequestContribution {
+            pullRequest {
+              title
+            }
+          }
+          commitContributionsByRepository(maxRepositories: 100) {
+            repository {
+              name
+              stargazers {
+                totalCount
+              }
+              forkCount
+              languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+                edges {
+                  size
+                  node {
+                    name
+                  }
+                }
+              }
+            }
+            contributions {
+              totalCount
+            }
+          }
+        }
+        repositories(first: 100, ownerAffiliations: OWNER, orderBy: {field: CREATED_AT, direction: DESC}) {
+          nodes {
+            name
+            createdAt
+          }
+        }
+      }
     }
-    const events2025 = events.filter((e: any) => new Date(e.created_at).getFullYear() === 2025);
-    allEvents.push(...events2025);
-    if (events.length < 100 || !events.some((e: any) => new Date(e.created_at).getFullYear() === 2025)) {
-      break;
-    }
-    page++;
-  }
-  
-  const contributionData: { [key: string]: { date: string, count: number } } = {};
-  for (let i = 0; i < 365; i++) {
-    const d = new Date(2025, 0, 1);
-    d.setDate(d.getDate() + i);
-    const dateString = d.toISOString().split('T')[0];
-    contributionData[dateString] = { date: dateString, count: 0 };
-  }
-  
-  allEvents.forEach(event => {
-    const date = new Date(event.created_at).toISOString().split('T')[0];
-    if (contributionData[date]) {
-      contributionData[date].count++;
-    }
+  `;
+
+  const { data: { user } } = await fetchFromGitHubGraphQL(contributionsQuery, {
+    username,
+    from: fromDate,
+    to: toDate,
   });
 
-  const contributionArray = Object.values(contributionData);
-  const contributionCount = allEvents.length;
-  
-  const pushEvents = allEvents.filter(e => e.type === 'PushEvent');
-  const commitCount = pushEvents.reduce((acc: number, e: any) => acc + (e.payload.commits?.length || 0), 0);
-  const commitMessages = pushEvents
-    .flatMap((e: any) => e.payload.commits?.map((c: any) => c.message) || [])
-    .slice(0, 10); // Get latest 10 commit messages
+  if (!user) {
+    throw new Error(`Not Found: Could not find user data for ${username}`);
+  }
 
-  const repos = await fetchFromGitHub(`/users/${username}/repos?per_page=100&sort=updated`, fetchOptions);
-  const repoNames = repos.map((r: any) => r.name);
-  const repos2025 = repos.filter((r: any) => new Date(r.created_at).getFullYear() === 2025);
+  const contribCollection = user.contributionsCollection;
+  const contributionCalendar = contribCollection.contributionCalendar;
 
-  let totalStars = 0;
-  let forks = 0;
-  let languages: { [lang: string]: number } = {};
+  const contributionData = contributionCalendar.weeks.flatMap((week: any) => week.contributionDays.map((day: any) => ({
+    date: day.date,
+    count: day.contributionCount
+  })));
+
+  const languages: { [lang: string]: number } = {};
   let mostCommittedRepo = '';
   let maxCommits = 0;
+  let totalStars = 0;
+  let forks = 0;
 
-  for (const repo of repos) {
-    totalStars += repo.stargazers_count;
-    forks += repo.forks_count;
-    const repoLangs = await fetchFromGitHub(`/repos/${username}/${repo.name}/languages`, fetchOptions);
-    for (const lang in repoLangs) {
-      languages[lang] = (languages[lang] || 0) + repoLangs[lang];
-    }
+  contribCollection.commitContributionsByRepository.forEach((repoContrib: any) => {
+    const repo = repoContrib.repository;
+    totalStars += repo.stargazers.totalCount;
+    forks += repo.forkCount;
     
-    const repoCommits = pushEvents
-      .filter((e:any) => e.repo.name === `${username}/${repo.name}`)
-      .reduce((acc: number, e: any) => acc + (e.payload.commits?.length || 0), 0);
-    
-    if (repoCommits > maxCommits) {
-        maxCommits = repoCommits;
+    repo.languages.edges.forEach((langEdge: any) => {
+      languages[langEdge.node.name] = (languages[langEdge.node.name] || 0) + langEdge.size;
+    });
+
+    if (repoContrib.contributions.totalCount > maxCommits) {
+        maxCommits = repoContrib.contributions.totalCount;
         mostCommittedRepo = repo.name;
     }
-  }
+  });
 
   const totalLangBytes = Object.values(languages).reduce((sum, bytes) => sum + bytes, 0);
   const topLanguages = Object.entries(languages)
@@ -188,39 +235,48 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
 
   const mostUsedLanguage = topLanguages.length > 0 ? topLanguages[0].language : 'N/A';
   
-  const pullRequestEvents = allEvents.filter(e => e.type === 'PullRequestEvent' && e.payload.action === 'closed' && e.payload.pull_request.merged);
-  const mergedPRs = pullRequestEvents.length;
+  const reposCreated2025 = user.repositories.nodes.filter((repo: any) => new Date(repo.createdAt).getFullYear() === 2025);
 
-  const issuesOpenedEvents = allEvents.filter(e => e.type === 'IssuesEvent' && e.payload.action === 'opened');
-  const issuesOpened = issuesOpenedEvents.length;
+  const fetchOptions = { next: { revalidate: 600 } };
+  let allEvents: any[] = [];
+  let page = 1;
+  while (page < 3) { // Limit to first 2 pages (200 events) for performance
+    const events = await fetchFromGitHub(`/users/${username}/events?per_page=100&page=${page}`, fetchOptions);
+    if (!Array.isArray(events) || events.length === 0) break;
+    const events2025 = events.filter((e: any) => new Date(e.created_at).getFullYear() === 2025);
+    allEvents.push(...events2025);
+    page++;
+  }
   
-  const longestStreak = getLongestStreak(contributionArray);
-  const mostProductiveDay = getMostProductiveDay(contributionArray);
-  const bestMonth = getBestMonth(contributionArray);
+  const pushEvents = allEvents.filter(e => e.type === 'PushEvent');
+  const commitMessages = pushEvents
+    .flatMap((e: any) => e.payload.commits?.map((c: any) => c.message) || [])
+    .slice(0, 10);
+    
+  const repoNames = user.repositories.nodes.map((r: any) => r.name);
+
 
   return {
     name: user.name || username,
     username,
-    avatarUrl: user.avatar_url,
-    contributionCount,
-    commitCount,
+    avatarUrl: user.avatarUrl,
+    contributionCount: contributionCalendar.totalContributions,
+    commitCount: contribCollection.totalCommitContributions,
     mostUsedLanguage,
-    contributionData: contributionArray,
-    longestStreak,
-    mostProductiveDay,
-    bestMonth,
+    contributionData,
+    longestStreak: getLongestStreak(contributionData),
+    mostProductiveDay: getMostProductiveDay(contributionData),
+    bestMonth: getBestMonth(contributionData),
     topLanguages,
     mostCommittedRepo,
     totalStars,
-    mergedPRs,
-    issuesOpened,
-    reposCreated: repos2025.length,
+    mergedPRs: contribCollection.totalPullRequestContributions,
+    issuesOpened: contribCollection.totalIssueContributions,
+    reposCreated: reposCreated2025.length,
     repoNames,
     commitMessages,
-    followers: user.followers,
+    followers: user.followers.totalCount,
     forks,
   };
 }
-
-
 
