@@ -1,18 +1,20 @@
 
 
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
-import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight } from "lucide-react";
+import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown } from "lucide-react";
 import { ContributionGraph } from "@/components/contribution-graph";
 import { ExportCard } from "@/components/export-card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi, CarouselProgress } from "@/components/ui/carousel";
 import { WrappedCard } from "@/components/wrapped-card";
 import NumberTicker from "@/components/number-ticker";
 import { LanguageChart } from "@/components/language-chart";
 import { Card, CardContent } from "@/components/ui/card";
 import { generateGitHubRoast } from "@/ai/flows/generate-github-roast";
+import { GiftIcon } from "@/components/icons/gift-icon";
 
 
 export default async function WrappedPage({ params }: { params: { username: string } }) {
@@ -44,18 +46,25 @@ export default async function WrappedPage({ params }: { params: { username: stri
       </header>
       <main className="z-10 flex w-full max-w-2xl flex-col items-center">
         <Carousel className="w-full">
+          <CarouselProgress />
           <CarouselContent>
             {/* Card 1: Welcome */}
             <CarouselItem>
               <WrappedCard>
-                <div className="flex h-full flex-col items-center justify-center text-center">
-                  <Avatar className="h-32 w-32 border-4 border-primary shadow-lg">
-                    <AvatarImage src={githubData.avatarUrl} alt={githubData.name} data-ai-hint="person portrait" />
-                    <AvatarFallback>{githubData.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <h1 className="mt-6 text-5xl font-bold">{githubData.name}</h1>
-                  <p className="text-2xl text-muted-foreground">@{githubData.username}</p>
-                  <p className="mt-8 text-3xl font-semibold bg-gradient-to-br from-white to-neutral-400 bg-clip-text text-transparent">Your 2025 GitHub Journey</p>
+                <div className="flex h-full flex-col items-center justify-between text-center">
+                    <div /> 
+                    <div className="flex flex-col items-center">
+                      <GiftIcon className="h-32 w-32" />
+                      <p className="mt-8 text-2xl text-muted-foreground">@{githubData.username}'s</p>
+                      <h1 className="text-5xl font-bold bg-gradient-to-br from-white to-green-400 bg-clip-text text-transparent">
+                        2025 GitHub Wrapped
+                      </h1>
+                      <p className="mt-4 text-lg text-muted-foreground">Your year in code, unwrapped.</p>
+                    </div>
+                    <div className="flex flex-col items-center gap-1 text-sm text-muted-foreground">
+                       <p>SWIPE OR PRESS &rarr; TO CONTINUE</p>
+                       <ChevronDown className="animate-bounce" />
+                    </div>
                 </div>
               </WrappedCard>
             </CarouselItem>
@@ -188,8 +197,23 @@ export default async function WrappedPage({ params }: { params: { username: stri
             </CarouselItem>
 
           </CarouselContent>
-          <CarouselPrevious className="left-[-50px] text-white hover:text-primary size-10" />
-          <CarouselNext className="right-[-50px] text-white hover:text-primary size-10" />
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center justify-center gap-4 rounded-full bg-black/50 px-4 py-2 backdrop-blur-sm">
+            <CarouselPrevious variant="ghost" className="static translate-y-0 text-white hover:text-primary" />
+            <button className="text-white hover:text-primary">
+              <Pause />
+            </button>
+            <CarouselNext variant="ghost" className="static translate-y-0 text-white hover:text-primary" />
+          </div>
+          <div className="absolute bottom-6 right-6 z-20">
+              <Button size="icon" variant="ghost" className="rounded-full bg-black/50 text-white backdrop-blur-sm hover:bg-primary hover:text-primary-foreground">
+                  <Share2 />
+              </Button>
+          </div>
+          <div className="absolute bottom-6 left-6 z-20">
+              <Button size="icon" variant="ghost" asChild className="rounded-full bg-black/50 text-white backdrop-blur-sm hover:bg-destructive hover:text-destructive-foreground">
+                  <Link href="/"><X /></Link>
+              </Button>
+          </div>
         </Carousel>
       </main>
        <footer className="absolute bottom-4 z-10 text-center text-sm text-white/50">

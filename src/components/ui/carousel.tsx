@@ -28,6 +28,8 @@ type CarouselContextProps = {
   scrollNext: () => void
   canScrollPrev: boolean
   canScrollNext: boolean
+  scrollSnaps: number[]
+  selectedIndex: number
 } & CarouselProps
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null)
@@ -67,14 +69,24 @@ const Carousel = React.forwardRef<
     )
     const [canScrollPrev, setCanScrollPrev] = React.useState(false)
     const [canScrollNext, setCanScrollNext] = React.useState(false)
+    const [selectedIndex, setSelectedIndex] = React.useState(0)
+    const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([])
 
     const onSelect = React.useCallback((api: CarouselApi) => {
       if (!api) {
         return
       }
 
+      setSelectedIndex(api.selectedScrollSnap())
       setCanScrollPrev(api.canScrollPrev())
       setCanScrollNext(api.canScrollNext())
+    }, [])
+
+    const onInit = React.useCallback((api: CarouselApi) => {
+      if (!api) {
+        return
+      }
+      setScrollSnaps(api.scrollSnapList())
     }, [])
 
     const scrollPrev = React.useCallback(() => {
@@ -110,15 +122,16 @@ const Carousel = React.forwardRef<
       if (!api) {
         return
       }
-
+      onInit(api)
       onSelect(api)
+      api.on("reInit", onInit)
       api.on("reInit", onSelect)
       api.on("select", onSelect)
 
       return () => {
         api?.off("select", onSelect)
       }
-    }, [api, onSelect])
+    }, [api, onSelect, onInit])
 
     return (
       <CarouselContext.Provider
@@ -132,6 +145,8 @@ const Carousel = React.forwardRef<
           scrollNext,
           canScrollPrev,
           canScrollNext,
+          scrollSnaps,
+          selectedIndex,
         }}
       >
         <div
@@ -252,6 +267,32 @@ const CarouselNext = React.forwardRef<
 })
 CarouselNext.displayName = "CarouselNext"
 
+const CarouselProgress = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
+  const { scrollSnaps, selectedIndex } = useCarousel()
+
+  return (
+    <div
+      className={cn("absolute top-0 left-0 right-0 z-10 flex justify-center items-center gap-2 p-4", className)}
+      {...props}
+    >
+      {scrollSnaps.map((_, index) => (
+        <div
+          key={index}
+          className={cn(
+            "h-1.5 rounded-full bg-white/20 transition-all duration-300 ease-in-out",
+            index === selectedIndex ? "w-8 bg-primary" : "w-4"
+          )}
+        />
+      ))}
+    </div>
+  )
+}
+CarouselProgress.displayName = "CarouselProgress"
+
+
 export {
   type CarouselApi,
   Carousel,
@@ -259,4 +300,5 @@ export {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
+  CarouselProgress,
 }
