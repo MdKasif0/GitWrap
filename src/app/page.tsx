@@ -1,3 +1,4 @@
+
 import { GithubForm } from "@/components/github-form";
 import { AnimatedBackground } from "@/components/animated-background";
 import { FeatureCard } from "@/components/feature-card";
@@ -46,6 +47,14 @@ export default function Home() {
           <p className="max-w-2xl text-lg text-muted-foreground sm:text-xl">
             Unwrap your coding year - see your stats, achievements, and developer journey in an epic visual story
           </p>
+          <a
+            href="https://gitroasted.netlify.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-block rounded-lg border border-orange-600 bg-orange-500 px-6 py-3 text-lg font-bold text-black shadow-lg transition-transform hover:scale-105"
+          >
+            Try GitRoasted
+          </a>
         </div>
         <GithubForm />
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 w-full">
