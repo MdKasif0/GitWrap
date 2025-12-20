@@ -3,6 +3,7 @@
 
 
 
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
 import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown, CheckCircle, GitPullRequest, Trophy, BrainCircuit, Rocket, ChevronLeft, ChevronRight, GitFork, Users } from "lucide-react";
@@ -290,10 +291,10 @@ export default async function WrappedPage({ params }: { params: { username: stri
             <CarouselItem className="h-full">
               <WrappedCard>
                 <div className="relative flex h-full flex-col items-center justify-center text-center">
-                  <div className="relative w-full max-w-2xl rounded-2xl border border-white/10 bg-gradient-to-br from-purple-900/20 to-blue-900/10 p-8 shadow-2xl backdrop-blur-lg">
-                    <p className="absolute -top-8 left-4 text-8xl font-black text-purple-500/50 opacity-50">“</p>
+                  <div className="relative w-full max-w-2xl rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-lg">
+                    <p className="absolute -top-8 left-4 text-8xl font-black text-white/20 opacity-50">“</p>
                     <p className="text-3xl font-bold italic leading-relaxed text-white/90">{roast}</p>
-                    <p className="absolute -bottom-8 right-4 text-8xl font-black text-blue-500/50 opacity-50">”</p>
+                    <p className="absolute -bottom-8 right-4 text-8xl font-black text-white/20 opacity-50">”</p>
                      <p className="mt-6 text-sm italic text-muted-foreground">— Roasted by Gemini</p>
                   </div>
                 </div>
