@@ -1,6 +1,7 @@
 
 
 
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
 import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown, CheckCircle, GitPullRequest, Trophy, BrainCircuit, Rocket, ChevronLeft, ChevronRight } from "lucide-react";
@@ -143,8 +144,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
                  <div className="absolute top-0 left-0 w-full h-full bg-[url('/circuit-board.svg')] bg-cover opacity-5 mix-blend-lighten z-0" />
                  <div className="z-10 flex flex-col items-center">
                    <h2 className="text-2xl text-muted-foreground">In 2025, you made</h2>
-                   <div
-                     className="my-4 text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-300 via-cyan-300 to-yellow-300"
+                   <div className="my-4 text-8xl font-black text-green-300"
                      style={{
                        textShadow: '0 0 10px hsl(var(--primary)/0.5), 0 0 20px hsl(var(--primary)/0.3)',
                      }}
