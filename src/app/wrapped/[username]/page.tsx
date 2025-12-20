@@ -4,6 +4,7 @@
 
 
 
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
 import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown } from "lucide-react";
@@ -19,6 +20,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { generateGitHubRoast } from "@/ai/flows/generate-github-roast";
 import { GiftIcon } from "@/components/icons/gift-icon";
 import { Badge } from "@/components/ui/badge";
+import { ContributionHeatmap } from "@/components/contribution-heatmap";
 
 
 export default async function WrappedPage({ params }: { params: { username: string } }) {
@@ -174,27 +176,38 @@ export default async function WrappedPage({ params }: { params: { username: stri
               </WrappedCard>
             </CarouselItem>
 
-             {/* Card 4: Streak & Patterns */}
+             {/* Card 4: Streak Highlight */}
             <CarouselItem className="h-full">
-              <WrappedCard>
-                <div className="flex h-full flex-col items-center justify-center text-center">
-                  <TrendingUp className="h-16 w-16 text-primary" />
-                  <h2 className="mt-4 text-3xl font-bold">Streak & Patterns</h2>
-                  <div className="my-8 flex w-full justify-around max-w-md">
-                    <div className="text-center">
-                       <p className="text-6xl font-black text-white">
-                        <NumberTicker value={githubData.longestStreak} />
-                       </p>
-                      <p className="text-xl text-muted-foreground">Day Streak</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-6xl font-black text-white">{githubData.mostProductiveDay.substring(0,3)}</p>
-                      <p className="text-xl text-muted-foreground">Busiest Day</p>
-                    </div>
+               <WrappedCard className="flex flex-col items-center justify-center p-8 text-center">
+                <h2 className="text-4xl font-bold mb-8">Streak Highlight</h2>
+                
+                <div className="flex items-center justify-center gap-4">
+                  <Flame className="size-20 text-orange-500" style={{ filter: 'drop-shadow(0 0 10px #F59E0B)'}}/>
+                  <div>
+                    <p className="text-8xl font-black text-green-400" style={{ textShadow: '0 0 10px hsla(148, 99%, 46%, 0.7)'}}>
+                      <NumberTicker value={githubData.longestStreak} />
+                      <span className="text-5xl ml-2">DAYS</span>
+                    </p>
+                    <p className="text-xl text-muted-foreground">Longest Streak</p>
                   </div>
-                   <div className="w-full h-48 px-4 max-w-2xl">
-                    <ContributionGraph data={githubData.contributionData} />
-                  </div>
+                </div>
+
+                <div className="mt-8 flex items-center justify-center gap-3">
+                   <Flame className="size-8 text-orange-400" />
+                   <div>
+                      <p className="text-3xl font-bold">
+                        <NumberTicker value={42} />
+                      </p>
+                      <p className="text-sm text-muted-foreground">Current Streak</p>
+                   </div>
+                </div>
+
+                <p className="mt-8 text-lg text-foreground/80 max-w-sm">
+                  Consistency is key! Your dedication to coding every day is inspiring.
+                </p>
+
+                <div className="mt-8 w-full max-w-xl">
+                  <ContributionHeatmap data={githubData.contributionData} />
                 </div>
               </WrappedCard>
             </CarouselItem>
@@ -296,6 +309,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
     </div>
   );
 }
+
 
 
 
