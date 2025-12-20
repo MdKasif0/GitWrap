@@ -2,6 +2,7 @@
 
 
 
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
 import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown } from "lucide-react";
@@ -12,10 +13,11 @@ import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselApi, CarouselProgress } from "@/components/ui/carousel";
 import { WrappedCard } from "@/components/wrapped-card";
 import NumberTicker from "@/components/number-ticker";
-import { LanguageChart } from "@/components/language-chart";
+import { LanguageChart, LANGUAGE_COLORS } from "@/components/language-chart";
 import { Card, CardContent } from "@/components/ui/card";
 import { generateGitHubRoast } from "@/ai/flows/generate-github-roast";
 import { GiftIcon } from "@/components/icons/gift-icon";
+import { Badge } from "@/components/ui/badge";
 
 
 export default async function WrappedPage({ params }: { params: { username: string } }) {
@@ -33,6 +35,28 @@ export default async function WrappedPage({ params }: { params: { username: stri
 
 
   const topLangs = githubData.topLanguages.slice(0, 5);
+
+  const getLangAbbreviation = (lang: string) => {
+    const abbreviations: { [key: string]: string } = {
+        'JavaScript': 'JS',
+        'Python': 'Py',
+        'TypeScript': 'TS',
+        'C++': 'C++',
+        'C#': 'C#',
+        'Shell': 'sh',
+        'HTML': 'HTML',
+        'CSS': 'CSS',
+        'Ruby': 'rb',
+        'Go': 'Go',
+        'Rust': 'rs',
+    };
+    return abbreviations[lang] || lang.substring(0, 2).toUpperCase();
+  }
+  const topLangAbbr = getLangAbbreviation(githubData.mostUsedLanguage);
+  const topLangColor = LANGUAGE_COLORS[githubData.mostUsedLanguage] || LANGUAGE_COLORS.OTHER;
+  
+  const totalLangBytes = githubData.topLanguages.reduce((sum, lang) => sum + lang.bytes, 0);
+
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background p-4">
@@ -103,14 +127,48 @@ export default async function WrappedPage({ params }: { params: { username: stri
 
              {/* Card 3: Language Breakdown */}
             <CarouselItem>
-              <WrappedCard>
-                <div className="flex h-full flex-col items-center justify-center p-6 text-center">
-                  <Languages className="h-16 w-16 text-primary" />
-                  <h2 className="mt-4 text-3xl font-bold">Language Breakdown</h2>
-                  <div className="my-6 w-full h-64">
-                    <LanguageChart data={topLangs} />
-                  </div>
-                  <p className="text-lg text-foreground">Your top languages of 2025.</p>
+              <WrappedCard className="flex flex-col items-center justify-center p-6 text-center">
+                <div className="absolute top-0 left-0 w-full h-full bg-[url('/circuit-board.svg')] bg-cover opacity-5 mix-blend-lighten z-0" />
+                <div className="z-10 w-full">
+                  <h2 className="text-3xl font-bold mb-4">Your Language Journey</h2>
+                  
+                  <Card className="bg-white/10 backdrop-blur-sm border-white/20 p-4 mb-6 relative">
+                    <div className="flex items-center gap-4">
+                      <div className="size-16 rounded-full flex items-center justify-center text-background text-2xl font-bold" style={{ backgroundColor: topLangColor }}>
+                        {topLangAbbr}
+                      </div>
+                      <div>
+                        <h3 className="text-3xl font-bold text-left">{githubData.mostUsedLanguage}</h3>
+                        <p className="text-muted-foreground text-left">was your go-to in 2025.</p>
+                      </div>
+                    </div>
+                     <p className="text-lg text-muted-foreground mt-2">You wrote <span className="font-bold text-white">
+                      {(githubData.topLanguages.find(l => l.language === githubData.mostUsedLanguage)?.bytes || 0).toLocaleString()}
+                      </span> lines of code.</p>
+                    <Badge className="absolute top-3 right-3 bg-primary text-primary-foreground border-none">#1 TOP LANG</Badge>
+                  </Card>
+
+                  <Card className="bg-white/10 backdrop-blur-sm border-white/20 p-4 w-full">
+                    <h3 className="text-xl font-semibold mb-2">Distribution</h3>
+                    <div className="relative w-full h-48">
+                      <LanguageChart data={topLangs} />
+                      <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                        <span className="text-4xl font-bold">{topLangs.length}</span>
+                        <span className="text-muted-foreground">LANGS</span>
+                      </div>
+                    </div>
+                     <div className="mt-4 flex flex-wrap justify-center gap-x-3 gap-y-2">
+                        {topLangs.map(({ language, percentage }) => (
+                            <Badge key={language} variant="outline" className="text-sm border-none" style={{
+                                backgroundColor: `${LANGUAGE_COLORS[language] || LANGUAGE_COLORS.OTHER}20`,
+                                color: LANGUAGE_COLORS[language] || LANGUAGE_COLORS.OTHER,
+                                border: `1px solid ${LANGUAGE_COLORS[language] || LANGUAGE_COLORS.OTHER}80`
+                            }}>
+                                {language} {percentage}%
+                            </Badge>
+                        ))}
+                    </div>
+                  </Card>
                 </div>
               </WrappedCard>
             </CarouselItem>
@@ -237,4 +295,5 @@ export default async function WrappedPage({ params }: { params: { username: stri
     </div>
   );
 }
+
 

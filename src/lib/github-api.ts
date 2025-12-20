@@ -13,7 +13,7 @@ export type GitHubData = {
   longestStreak: number;
   mostProductiveDay: string;
   bestMonth: string;
-  topLanguages: { language: string, percentage: number }[];
+  topLanguages: { language: string, percentage: number, bytes: number }[];
   mostCommittedRepo: string;
   totalStars: number;
   mergedPRs: number;
@@ -178,6 +178,7 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
     .slice(0, 5)
     .map(([language, bytes]) => ({
       language,
+      bytes,
       percentage: totalLangBytes > 0 ? Math.round((bytes / totalLangBytes) * 100) : 0
     }));
 
@@ -214,4 +215,5 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
     commitMessages
   };
 }
+
 
