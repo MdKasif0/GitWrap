@@ -117,12 +117,16 @@ export default async function WrappedPage({ params }: { params: { username: stri
                 <div className="flex h-full flex-col items-center justify-between text-center">
                     <div /> 
                     <div className="flex flex-col items-center">
-                      <GiftIcon className="h-32 w-32" />
-                      <p className="mt-8 text-2xl text-muted-foreground">@{githubData.username}'s</p>
-                      <h1 className="text-5xl font-bold bg-gradient-to-br from-white to-green-400 bg-clip-text text-transparent">
-                        2025 GitHub Wrapped
-                      </h1>
-                      <p className="mt-4 text-lg text-muted-foreground">Your year in code, unwrapped.</p>
+                        <Avatar className="h-32 w-32 border-4 border-primary/50 mb-4">
+                            <AvatarImage src={githubData.avatarUrl} alt={githubData.name} />
+                            <AvatarFallback>{githubData.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <h2 className="text-4xl font-bold text-white">{githubData.name}</h2>
+                        <p className="text-xl text-muted-foreground">@{githubData.username}</p>
+                        <h1 className="text-5xl font-bold bg-gradient-to-br from-white to-green-400 bg-clip-text text-transparent mt-8">
+                            2025 GitHub Wrapped
+                        </h1>
+                        <p className="mt-2 text-lg text-muted-foreground">Your year in code, unwrapped.</p>
                     </div>
                     <div className="flex flex-col items-center gap-1 text-sm text-muted-foreground">
                        <p>SWIPE OR PRESS &rarr; TO CONTINUE</p>
@@ -347,9 +351,6 @@ export default async function WrappedPage({ params }: { params: { username: stri
           </div>
         </Carousel>
       </main>
-       <footer className="absolute bottom-4 z-10 text-center text-sm text-white/50">
-        <p>&copy; GitWrap 2025 - All rights reserved.</p>
-      </footer>
     </div>
   );
 }
