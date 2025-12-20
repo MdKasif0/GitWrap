@@ -70,7 +70,7 @@ export function ContributionHeatmap({ data }: HeatmapProps) {
                     <div key={i} className="h-3 leading-3" style={{ visibility: i % 2 === 1 ? 'visible' : 'hidden'}}>{day}</div>
                 ))}
             </div>
-            <div className="flex w-full flex-col gap-2 overflow-x-auto">
+            <div className="flex flex-1 flex-col gap-2 overflow-x-auto">
                 <div className="flex justify-between text-xs text-muted-foreground" style={{ minWidth: '600px' }}>
                     <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
                 </div>
