@@ -114,8 +114,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
             {/* Card 1: Welcome */}
             <CarouselItem className="h-full">
               <WrappedCard>
-                <div className="flex h-full flex-col items-center justify-between text-center">
-                    <div /> 
+                <div className="flex h-full flex-col items-center justify-center text-center">
                     <div className="flex flex-col items-center">
                         <Avatar className="h-32 w-32 border-4 border-primary/50 mb-4">
                             <AvatarImage src={githubData.avatarUrl} alt={githubData.name} />
@@ -128,7 +127,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
                         </h1>
                         <p className="mt-2 text-lg text-muted-foreground">Your year in code, unwrapped.</p>
                     </div>
-                    <div className="flex flex-col items-center gap-1 text-sm text-muted-foreground">
+                    <div className="flex flex-col items-center gap-1 text-sm text-muted-foreground mt-24">
                        <p>SWIPE OR PRESS &rarr; TO CONTINUE</p>
                        <ChevronDown className="animate-bounce" />
                     </div>
