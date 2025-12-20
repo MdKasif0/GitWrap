@@ -17,6 +17,8 @@ import { GiftIcon } from "@/components/icons/gift-icon";
 import { Badge } from "@/components/ui/badge";
 import { ContributionHeatmap } from "@/components/contribution-heatmap";
 import { AchievementCard } from "@/components/achievement-card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Download, Link as LinkIcon, Twitter } from 'lucide-react';
 
 
 export default async function WrappedPage({ params }: { params: { username: string } }) {
@@ -312,7 +314,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
                 <WrappedCard>
                     <div className="flex h-full flex-col items-center justify-center text-center">
                         <h2 className="text-3xl font-bold mb-8">Share Your Wrap</h2>
-                        <ExportCard data={githubData} />
+                        <ExportCard data={githubData} roast={roast} />
                     </div>
                 </WrappedCard>
             </CarouselItem>
@@ -325,11 +327,19 @@ export default async function WrappedPage({ params }: { params: { username: stri
             </button>
             <CarouselNext variant="ghost" className="static translate-y-0 text-white hover:text-primary" />
           </div>
-          <div className="absolute bottom-6 right-6 z-20">
-              <Button size="icon" variant="ghost" className="rounded-full bg-black/50 text-white backdrop-blur-sm hover:bg-primary hover:text-primary-foreground">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button size="icon" variant="ghost" className="absolute bottom-6 right-6 z-20 rounded-full bg-black/50 text-white backdrop-blur-sm hover:bg-primary hover:text-primary-foreground">
                   <Share2 />
               </Button>
-          </div>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px] bg-[#1C1C1C] border-purple-500/20">
+                <DialogHeader>
+                    <DialogTitle className="text-center text-white">Share Your Card</DialogTitle>
+                </DialogHeader>
+                <ExportCard data={githubData} roast={roast} isModalVersion={true} />
+            </DialogContent>
+          </Dialog>
           <div className="absolute bottom-6 left-6 z-20">
               <Button size="icon" variant="ghost" asChild className="rounded-full bg-black/50 text-white backdrop-blur-sm hover:bg-destructive hover:text-destructive-foreground">
                   <Link href="/"><X /></Link>
