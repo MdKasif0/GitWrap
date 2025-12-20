@@ -3,6 +3,7 @@
 
 
 
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
 import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown } from "lucide-react";
@@ -59,7 +60,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
 
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background p-4">
+    <div className="relative flex h-screen w-screen flex-col items-center justify-center overflow-hidden bg-background">
        <div className="pointer-events-none absolute inset-0 z-0 h-full w-full bg-black">
         <div className="absolute inset-0 z-0 bg-[url('https://firebasestudio.app/assets/bg-stars.svg')] bg-repeat"></div>
         <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,hsl(var(--primary)/0.1)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--primary)/0.1)_1px,transparent_1px)] bg-[size:6rem_6rem] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_10%,transparent_100%)]"></div>
@@ -69,12 +70,12 @@ export default async function WrappedPage({ params }: { params: { username: stri
           <Link href="/"><ArrowLeft /> Back to start</Link>
         </Button>
       </header>
-      <main className="z-10 flex w-full max-w-2xl flex-col items-center">
-        <Carousel className="w-full">
+      <main className="z-10 flex h-full w-full flex-col items-center">
+        <Carousel className="h-full w-full">
           <CarouselProgress />
-          <CarouselContent>
+          <CarouselContent className="h-full">
             {/* Card 1: Welcome */}
-            <CarouselItem>
+            <CarouselItem className="h-full">
               <WrappedCard>
                 <div className="flex h-full flex-col items-center justify-between text-center">
                     <div /> 
@@ -95,7 +96,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
             </CarouselItem>
 
             {/* Card 2: Commit Overview */}
-            <CarouselItem>
+            <CarouselItem className="h-full">
                <WrappedCard className="flex flex-col justify-between items-center text-center p-8">
                  <div className="absolute top-0 left-0 w-full h-full bg-[url('/circuit-board.svg')] bg-cover opacity-5 mix-blend-lighten z-0" />
                  <div className="z-10">
@@ -126,10 +127,10 @@ export default async function WrappedPage({ params }: { params: { username: stri
              </CarouselItem>
 
              {/* Card 3: Language Breakdown */}
-            <CarouselItem>
+            <CarouselItem className="h-full">
               <WrappedCard className="flex flex-col items-center justify-center p-6 text-center">
                 <div className="absolute top-0 left-0 w-full h-full bg-[url('/circuit-board.svg')] bg-cover opacity-5 mix-blend-lighten z-0" />
-                <div className="z-10 w-full">
+                <div className="z-10 w-full max-w-md">
                   <h2 className="text-3xl font-bold mb-4">Your Language Journey</h2>
                   
                   <Card className="bg-white/10 backdrop-blur-sm border-white/20 p-4 mb-6 relative">
@@ -174,12 +175,12 @@ export default async function WrappedPage({ params }: { params: { username: stri
             </CarouselItem>
 
              {/* Card 4: Streak & Patterns */}
-            <CarouselItem>
+            <CarouselItem className="h-full">
               <WrappedCard>
                 <div className="flex h-full flex-col items-center justify-center text-center">
                   <TrendingUp className="h-16 w-16 text-primary" />
                   <h2 className="mt-4 text-3xl font-bold">Streak & Patterns</h2>
-                  <div className="my-8 flex w-full justify-around">
+                  <div className="my-8 flex w-full justify-around max-w-md">
                     <div className="text-center">
                        <p className="text-6xl font-black text-white">
                         <NumberTicker value={githubData.longestStreak} />
@@ -191,7 +192,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
                       <p className="text-xl text-muted-foreground">Busiest Day</p>
                     </div>
                   </div>
-                   <div className="w-full h-48 px-4">
+                   <div className="w-full h-48 px-4 max-w-2xl">
                     <ContributionGraph data={githubData.contributionData} />
                   </div>
                 </div>
@@ -199,7 +200,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
             </CarouselItem>
             
             {/* Card 5: Repository Highlights */}
-            <CarouselItem>
+            <CarouselItem className="h-full">
               <WrappedCard>
                 <div className="flex h-full flex-col items-center justify-center gap-6 text-center">
                   <Github className="h-16 w-16 text-primary" />
@@ -228,9 +229,9 @@ export default async function WrappedPage({ params }: { params: { username: stri
             </CarouselItem>
 
             {/* Card 6: The Roast */}
-            <CarouselItem>
+            <CarouselItem className="h-full">
               <WrappedCard>
-                <div className="flex h-full flex-col items-center justify-center text-center bg-gradient-to-br from-[#0A0A50]/80 to-background rounded-lg p-8">
+                <div className="flex h-full flex-col items-center justify-center text-center bg-gradient-to-br from-[#0A0A50]/80 to-background rounded-lg p-8 max-w-2xl">
                   <Flame className="h-16 w-16 text-primary" />
                   <h2 className="mt-4 text-3xl font-bold">The Roast</h2>
                   <p className="mt-6 text-2xl italic leading-relaxed text-foreground/90">{roast}</p>
@@ -240,12 +241,12 @@ export default async function WrappedPage({ params }: { params: { username: stri
             </CarouselItem>
 
              {/* Card 7: Achievements */}
-             <CarouselItem>
+             <CarouselItem className="h-full">
               <WrappedCard>
                 <div className="flex h-full flex-col items-center justify-center text-center p-6">
                   <Sparkles className="h-16 w-16 text-primary" />
                   <h2 className="mt-4 text-3xl font-bold">Achievements</h2>
-                  <div className="mt-6 w-full space-y-3 px-4">
+                  <div className="mt-6 w-full space-y-3 px-4 max-w-md">
                     {achievements.slice(0, 4).map((achievement, i) => (
                       <Card key={i} className="bg-card/50">
                         <CardContent className="flex items-center gap-4 p-4">
@@ -260,7 +261,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
             </CarouselItem>
 
             {/* Card 8: Share */}
-            <CarouselItem>
+            <CarouselItem className="h-full">
                 <WrappedCard>
                     <div className="flex h-full flex-col items-center justify-center text-center">
                         <h2 className="text-3xl font-bold mb-8">Share Your Wrap</h2>
@@ -295,5 +296,6 @@ export default async function WrappedPage({ params }: { params: { username: stri
     </div>
   );
 }
+
 
 
