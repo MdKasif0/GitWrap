@@ -1,7 +1,8 @@
 
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
-import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown, CheckCircle, GitPullRequest } from "lucide-react";
+import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown, CheckCircle, GitPullRequest, Trophy, BrainCircuit, Rocket } from "lucide-react";
 import { ContributionGraph } from "@/components/contribution-graph";
 import { ExportCard } from "@/components/export-card";
 import Link from "next/link";
@@ -15,6 +16,7 @@ import { generateGitHubRoast } from "@/ai/flows/generate-github-roast";
 import { GiftIcon } from "@/components/icons/gift-icon";
 import { Badge } from "@/components/ui/badge";
 import { ContributionHeatmap } from "@/components/contribution-heatmap";
+import { AchievementCard } from "@/components/achievement-card";
 
 
 export default async function WrappedPage({ params }: { params: { username: string } }) {
@@ -23,10 +25,48 @@ export default async function WrappedPage({ params }: { params: { username: stri
   const roast = "With all those commits, your keyboard must be begging for a vacation. At least you're keeping the 'git blame' command interesting!";
   
   const achievements = [
-    `Code Alchemist: Mastered the art of crafting code in ${githubData.mostUsedLanguage}!`,
-    `Commitment Champion: Reached a new milestone with ${githubData.commitCount} commits!`,
-    `Contribution King/Queen: Your ${githubData.contributionCount} contributions are making a difference!`,
-    "Open Source Star: You've become a beacon in the open-source community!"
+    {
+      icon: <Trophy className="text-yellow-400" />,
+      title: 'Open Source Titan',
+      description: 'Contributed to 50+ projects, including TensorFlow and Kubernetes. A true legend.',
+      rarity: 'Legendary',
+      color: 'yellow'
+    },
+    {
+      icon: <Flame className="text-purple-400" />,
+      title: 'Commit Streak Master',
+      description: 'Achieved a 365-day commit streak. Your dedication is unmatched!',
+      rarity: 'Epic',
+      color: 'purple'
+    },
+    {
+      icon: <BrainCircuit className="text-blue-400" />,
+      title: 'Language Polyglot',
+      description: 'Code in 10+ different languages. You speak the language of innovation.',
+      rarity: 'Rare',
+      color: 'blue'
+    },
+    {
+      icon: <GitPullRequest className="text-gray-400" />,
+      title: 'Pull Request Pro',
+      description: "Merged 200+ pull requests this year. You're a collaboration expert.",
+      rarity: 'Common',
+      color: 'gray'
+    },
+    {
+      icon: <Rocket className="text-blue-400" />,
+      title: 'Early Adopter',
+      description: 'Used 5+ new GitHub features in their beta phase. Always ahead of the curve.',
+      rarity: 'Rare',
+      color: 'blue'
+    },
+    {
+      icon: <Sparkles className="text-gray-400" />,
+      title: 'Star Gazer',
+      description: 'Starred 1,000+ repositories. You have an eye for great code.',
+      rarity: 'Common',
+      color: 'gray'
+    },
   ];
 
 
@@ -256,16 +296,11 @@ export default async function WrappedPage({ params }: { params: { username: stri
              <CarouselItem className="h-full">
               <WrappedCard>
                 <div className="flex h-full flex-col items-center justify-center text-center p-6">
-                  <Sparkles className="h-16 w-16 text-primary" />
-                  <h2 className="mt-4 text-3xl font-bold">Achievements</h2>
-                  <div className="mt-6 w-full space-y-3 px-4 max-w-md">
-                    {achievements.slice(0, 4).map((achievement, i) => (
-                      <Card key={i} className="bg-card/50">
-                        <CardContent className="flex items-center gap-4 p-4">
-                          <Award className="h-6 w-6 flex-shrink-0 text-primary" />
-                          <p className="font-medium text-left">{achievement}</p>
-                        </CardContent>
-                      </Card>
+                  <h2 className="text-3xl font-bold mb-2">Achievements</h2>
+                  <p className="text-muted-foreground mb-8">Your 2025 Coding Milestones</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xl">
+                    {achievements.map((achievement, i) => (
+                      <AchievementCard key={i} {...achievement} />
                     ))}
                   </div>
                 </div>
