@@ -1,5 +1,6 @@
 
 
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
 import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown, CheckCircle, GitPullRequest, Trophy, BrainCircuit, Rocket, ChevronLeft, ChevronRight } from "lucide-react";
@@ -138,18 +139,18 @@ export default async function WrappedPage({ params }: { params: { username: stri
 
             {/* Card 2: Commit Overview */}
             <CarouselItem className="h-full">
-               <WrappedCard className="flex flex-col justify-between items-center text-center p-8">
+               <WrappedCard className="flex flex-col justify-center items-center text-center p-8">
                  <div className="absolute top-0 left-0 w-full h-full bg-[url('/circuit-board.svg')] bg-cover opacity-5 mix-blend-lighten z-0" />
-                 <div className="z-10">
+                 <div className="z-10 flex flex-col items-center">
                    <h2 className="text-2xl text-muted-foreground">In 2025, you made</h2>
-                   <p
-                     className="my-2 text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-300 via-cyan-300 to-yellow-300"
+                   <div
+                     className="my-4 text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-green-300 via-cyan-300 to-yellow-300"
                      style={{
                        textShadow: '0 0 10px hsl(var(--primary)/0.5), 0 0 20px hsl(var(--primary)/0.3)',
                      }}
                    >
                      <NumberTicker value={githubData.commitCount} />
-                   </p>
+                   </div>
                    <p className="text-6xl font-bold text-white/90">commits</p>
 
                    <div className="mt-6 space-y-1 text-lg">
@@ -158,7 +159,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
                    </div>
                  </div>
 
-                 <div className="w-full h-48 z-10 mt-auto">
+                 <div className="w-full h-48 z-10 mt-12">
                     <ContributionGraph 
                       data={githubData.contributionData} 
                       bestMonth={githubData.bestMonth}
