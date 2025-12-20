@@ -69,7 +69,7 @@ export function ContributionGraph({ data, bestMonth }: ContributionGraphProps) {
                <LabelList 
                   dataKey="total" 
                   position="top" 
-                  formatter={(value: number, props: any) => (chartData[props.index].name === bestMonth ? value : null)}
+                  formatter={(value: number, index: number) => (chartData[index]?.name === bestMonth ? value : null)}
                   className="fill-white font-bold"
                 />
               {chartData.map((entry, index) => (
