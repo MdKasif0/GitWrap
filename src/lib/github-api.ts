@@ -21,6 +21,8 @@ export type GitHubData = {
   reposCreated: number;
   repoNames: string[];
   commitMessages: string[];
+  followers: number;
+  forks: number;
 };
 
 const GITHUB_API_URL = 'https://api.github.com';
@@ -151,12 +153,14 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
   const repos2025 = repos.filter((r: any) => new Date(r.created_at).getFullYear() === 2025);
 
   let totalStars = 0;
+  let forks = 0;
   let languages: { [lang: string]: number } = {};
   let mostCommittedRepo = '';
   let maxCommits = 0;
 
   for (const repo of repos) {
     totalStars += repo.stargazers_count;
+    forks += repo.forks_count;
     const repoLangs = await fetchFromGitHub(`/repos/${username}/${repo.name}/languages`, fetchOptions);
     for (const lang in repoLangs) {
       languages[lang] = (languages[lang] || 0) + repoLangs[lang];
@@ -212,8 +216,11 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
     issuesOpened,
     reposCreated: repos2025.length,
     repoNames,
-    commitMessages
+    commitMessages,
+    followers: user.followers,
+    forks,
   };
 }
+
 
 

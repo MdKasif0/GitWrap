@@ -2,9 +2,10 @@
 
 
 
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
-import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown, CheckCircle, GitPullRequest, Trophy, BrainCircuit, Rocket, ChevronLeft, ChevronRight } from "lucide-react";
+import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown, CheckCircle, GitPullRequest, Trophy, BrainCircuit, Rocket, ChevronLeft, ChevronRight, GitFork, Users } from "lucide-react";
 import { ContributionGraph } from "@/components/contribution-graph";
 import { ExportCard } from "@/components/export-card";
 import Link from "next/link";
@@ -271,14 +272,14 @@ export default async function WrappedPage({ params }: { params: { username: stri
                       <p className="text-lg text-muted-foreground">New Repos</p>
                   </Card>
                   <Card className="bg-card/50 text-center flex flex-col justify-center items-center p-6">
-                      <GitPullRequest className="size-10 text-primary mb-4"/>
-                      <p className="text-4xl font-black text-white"><NumberTicker value={githubData.mergedPRs} /></p>
-                      <p className="text-lg text-muted-foreground">PRs Merged</p>
+                      <GitFork className="size-10 text-primary mb-4"/>
+                      <p className="text-4xl font-black text-white"><NumberTicker value={githubData.forks} /></p>
+                      <p className="text-lg text-muted-foreground">Total Forks</p>
                   </Card>
                   <Card className="bg-card/50 text-center flex flex-col justify-center items-center p-6">
-                      <CheckCircle className="size-10 text-primary mb-4"/>
-                      <p className="text-4xl font-black text-white"><NumberTicker value={githubData.issuesOpened} /></p>
-                      <p className="text-lg text-muted-foreground">Issues Solved</p>
+                      <Users className="size-10 text-primary mb-4"/>
+                      <p className="text-4xl font-black text-white"><NumberTicker value={githubData.followers} /></p>
+                      <p className="text-lg text-muted-foreground">Followers</p>
                   </Card>
                 </div>
                  <p className="text-lg text-foreground mt-8">Your most committed repo: <span className="font-bold text-primary">{githubData.mostCommittedRepo || 'N/A'}</span></p>
