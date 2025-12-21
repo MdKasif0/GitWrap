@@ -40,13 +40,13 @@ export default function Home() {
       "@type": "WebSite",
       "name": "GitWrap",
       "alternateName": "GitHub Wrapped 2025",
-      "url": "https://gitwrap.com", // Replace with your actual domain
+      "url": "https://gitwrap.netlify.app",
       "description": "Create your personalized GitHub Wrapped 2025. Analyze your coding stats, top languages, contribution streaks, and get roasted by AI.",
       "potentialAction": {
         "@type": "SearchAction",
         "target": {
           "@type": "EntryPoint",
-          "urlTemplate": "https://gitwrap.com/wrapped/{search_term_string}" // Replace with your actual domain
+          "urlTemplate": "https://gitwrap.netlify.app/wrapped/{search_term_string}"
         },
         "query-input": "required name=search_term_string"
       },
@@ -59,8 +59,8 @@ export default function Home() {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "GitWrap",
-      "url": "https://gitwrap.com", // Replace with your actual domain
-      "logo": "https://gitwrap.com/gitwrap.png", // Replace with your actual domain
+      "url": "https://gitwrap.netlify.app",
+      "logo": "https://gitwrap.netlify.app/gitwrap.png",
       "description": "GitWrap creates personalized GitHub year-in-review experiences for developers.",
       "sameAs": [
         "https://twitter.com/GitWrap" // Replace with your actual handle

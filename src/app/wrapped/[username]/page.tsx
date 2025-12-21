@@ -24,20 +24,17 @@ import { Download, Link as LinkIcon, Twitter } from 'lucide-react';
 
 export async function generateMetadata({ params }: { params: { username: string } }): Promise<Metadata> {
   const username = params.username;
-  // NOTE: In a real app, you might fetch minimal data here to populate the description
-  // For now, we'll use a template.
   const description = `Check out ${username}'s GitHub Wrapped 2025! See their coding stats, top languages, contribution streaks, and more.`;
   return {
     title: `${username}'s GitHub Wrapped 2025 | GitWrap`,
     description: description,
     alternates: {
-      canonical: `https://gitwrap.com/wrapped/${username}`, // Replace with your actual domain
+      canonical: `https://gitwrap.netlify.app/wrapped/${username}`,
     },
     openGraph: {
         title: `${username}'s GitHub Wrapped 2025`,
         description: description,
-        url: `https://gitwrap.com/wrapped/${username}`, // Replace with your actual domain
-        // You could dynamically generate an Open Graph image for each user here
+        url: `https://gitwrap.netlify.app/wrapped/${username}`,
         images: [
             {
                 url: '/og-gitwrap.png', // Fallback image
@@ -53,7 +50,7 @@ export async function generateMetadata({ params }: { params: { username: string 
       card: 'summary_large_image',
       title: `${username}'s GitHub Wrapped 2025 | GitWrap`,
       description: description,
-      creator: '@GitWrap', // Replace with your actual Twitter handle
+      creator: '@GitWrap',
       images: ['/og-gitwrap.png'],
     },
   };
@@ -126,7 +123,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
       "@type": "Article",
       "headline": `${githubData.name}'s GitHub Wrapped 2025`,
       "description": `GitHub statistics and coding analytics for ${githubData.name} in 2025.`,
-      "image": `https://gitwrap.com/api/og/${githubData.username}`, // Replace with your actual domain
+      "image": `https://gitwrap.netlify.app/api/og/${githubData.username}`,
       "author": {
         "@type": "Person",
         "name": githubData.name,
@@ -137,7 +134,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
         "name": "GitWrap",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://gitwrap.com/gitwrap.png" // Replace with your actual domain
+          "url": "https://gitwrap.netlify.app/gitwrap.png"
         }
       },
       "datePublished": "2025-01-01",
@@ -151,13 +148,13 @@ export default async function WrappedPage({ params }: { params: { username: stri
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": "https://gitwrap.com" // Replace with your actual domain
+          "item": "https://gitwrap.netlify.app"
         },
         {
           "@type": "ListItem",
           "position": 2,
           "name": githubData.username,
-          "item": `https://gitwrap.com/wrapped/${githubData.username}` // Replace with your actual domain
+          "item": `https://gitwrap.netlify.app/wrapped/${githubData.username}`
         }
       ]
     }

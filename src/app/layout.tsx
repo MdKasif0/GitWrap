@@ -14,13 +14,13 @@ export const metadata: Metadata = {
   publisher: 'GitWrap',
   robots: 'index, follow',
   alternates: {
-    canonical: 'https://gitwrap.com' // Replace with your actual domain
+    canonical: 'https://gitwrap.netlify.app'
   },
   manifest: '/manifest.json',
   openGraph: {
     title: 'GitWrap 2025 - Your GitHub Year in Review',
     description: 'Create your personalized GitHub Wrapped 2025! Discover your coding stats, top languages, contribution streaks, and get hilariously roasted by AI.',
-    url: 'https://gitwrap.com', // Replace with your actual domain
+    url: 'https://gitwrap.netlify.app',
     siteName: 'GitWrap',
     images: [
       {
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'GitWrap 2025 - Your GitHub Year in Review',
     description: 'Create your personalized GitHub Wrapped 2025! Discover your coding stats, top languages, contribution streaks, and get hilariously roasted by AI.',
-    creator: '@GitWrap', // Replace with your actual Twitter handle
+    creator: '@GitWrap',
     images: ['/og-gitwrap.png'],
   },
   appleWebApp: {
