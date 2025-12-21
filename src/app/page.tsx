@@ -7,6 +7,7 @@ import { AchievementsIcon } from "@/components/icons/achievements-icon";
 import { SeriousnessIcon } from "@/components/icons/seriousness-icon";
 import { ShareIcon } from "@/components/icons/share-icon";
 import Image from "next/image";
+import { Header } from "@/components/header";
 
 export default function Home() {
   const features = [
@@ -34,6 +35,7 @@ export default function Home() {
 
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background p-4">
+      <Header />
       <AnimatedBackground />
       <div className="z-10 flex w-full max-w-4xl flex-col items-center space-y-16">
         <div className="flex flex-col items-center space-y-4 text-center">
