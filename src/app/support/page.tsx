@@ -45,7 +45,7 @@ export default function SupportPage() {
       >
         <div className="text-center">
           <div className="mb-6 text-6xl">☕</div>
-          <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-br from-purple-400 via-pink-500 to-orange-400 bg-clip-text text-transparent sm:text-5xl">
+          <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-br from-green-300 via-primary to-green-600 bg-clip-text text-transparent sm:text-5xl">
             Support GitWrap
           </h1>
           <p className="mt-4 max-w-md mx-auto text-lg text-muted-foreground">
