@@ -1,7 +1,9 @@
+
 "use client";
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { ChevronLeft } from "lucide-react";
 import { useRef } from "react";
 
 type HeatmapProps = {
@@ -77,9 +79,21 @@ export function ContributionHeatmap({ data }: HeatmapProps) {
     }
   };
 
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+      // Scroll back to the beginning if at the end, otherwise scroll right
+      if (scrollLeft + clientWidth >= scrollWidth -1) {
+        scrollContainerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        scrollContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
      <TooltipProvider>
-      <div className="flex w-full justify-center rounded-lg border border-white/10 bg-white/5 p-4 backdrop-blur-sm"
+      <div className="relative w-full justify-center rounded-lg border border-white/10 bg-white/5 p-4 backdrop-blur-sm"
            onWheel={handleWheel}
       >
         <div className="flex w-full gap-3">
@@ -88,7 +102,7 @@ export function ContributionHeatmap({ data }: HeatmapProps) {
                     <div key={i} className="h-3 leading-3" style={{ visibility: i % 2 === 1 ? 'visible' : 'hidden'}}>{day}</div>
                 ))}
             </div>
-            <div ref={scrollContainerRef} className="w-full overflow-x-auto">
+            <div ref={scrollContainerRef} className="w-full overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
                 <div className="flex flex-col gap-2" style={{ minWidth: '620px' }}>
                     <div className="flex justify-around text-xs text-muted-foreground">
                         <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
@@ -126,6 +140,12 @@ export function ContributionHeatmap({ data }: HeatmapProps) {
                 </div>
             </div>
         </div>
+        <button 
+          onClick={handleScroll}
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-opacity hover:bg-black/80 md:hidden"
+        >
+            <ChevronLeft className="h-4 w-4" />
+        </button>
       </div>
     </TooltipProvider>
   );
