@@ -174,7 +174,13 @@ export async function generateWrap(
       return fallbackResponse();
     }
     
-    let parsedJson = JSON.parse(content);
+    let parsedJson;
+    try {
+        parsedJson = JSON.parse(content);
+    } catch (e) {
+        console.error('Failed to parse Groq response as JSON:', content);
+        return fallbackResponse();
+    }
 
     // Defensive parsing: find the actual data if it's nested
     if (parsedJson.longRoast === undefined || parsedJson.achievements === undefined) {
@@ -184,21 +190,31 @@ export async function generateWrap(
       }
     }
 
-    const validationResult = GenerateWrapOutputSchema.safeParse(parsedJson);
+    // Validate the overall structure, but handle achievements separately for robustness
+    const RoastsSchema = GenerateWrapOutputSchema.pick({ longRoast: true, shortRoast: true });
+    const roastsValidation = RoastsSchema.safeParse(parsedJson);
 
-    if (!validationResult.success) {
-        console.error('Groq response failed Zod validation after parsing:', validationResult.error);
-        return fallbackResponse();
+    if (!roastsValidation.success) {
+      console.error('Groq response failed roasts validation:', roastsValidation.error);
+      // Still try to salvage achievements, but use fallback roasts
+      const fallback = await fallbackResponse();
+      parsedJson.longRoast = fallback.longRoast;
+      parsedJson.shortRoast = fallback.shortRoast;
     }
     
-    let output = validationResult.data;
-    
-    // Ensure we always return exactly 4 achievements
-    if (output.achievements.length > 4) {
-      output.achievements = output.achievements.slice(0, 4);
+    let validAchievements: z.infer<typeof AchievementSchema>[] = [];
+    if (Array.isArray(parsedJson.achievements)) {
+        parsedJson.achievements.forEach((ach: any) => {
+            const result = AchievementSchema.safeParse(ach);
+            if (result.success) {
+                validAchievements.push(result.data);
+            }
+        });
     }
-    while (output.achievements.length < 4) {
-      output.achievements.push({
+
+    // Ensure we always have exactly 4 achievements
+    while (validAchievements.length < 4) {
+      validAchievements.push({
          icon: 'GitPullRequest',
          title: 'Code Cadet',
          description: 'Keeps the coding world spinning.',
@@ -206,11 +222,18 @@ export async function generateWrap(
          color: 'gray',
       });
     }
+    
+    // Final assembly
+    const finalOutput = {
+        longRoast: roastsValidation.success ? roastsValidation.data.longRoast : parsedJson.longRoast,
+        shortRoast: roastsValidation.success ? roastsValidation.data.shortRoast : parsedJson.shortRoast,
+        achievements: validAchievements.slice(0, 4), // Ensure it's exactly 4
+    };
 
-    return output;
+    return finalOutput;
 
   } catch (error) {
-    console.error('Error calling Groq API or parsing response:', error);
+    console.error('Error calling Groq API or processing response:', error);
     return fallbackResponse();
   }
 }
