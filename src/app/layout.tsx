@@ -2,6 +2,7 @@ import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Inter } from 'next/font/google'
+import GoogleAnalytics from '@/components/google-analytics';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -57,6 +58,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <head>
+        <GoogleAnalytics measurementId="G-LSER3NW18Z" />
         <meta name="theme-color" content="#0a0a0a" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#8b5cf6" />
         <meta httpEquiv="content-language" content="en-US" />
