@@ -20,6 +20,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'GitWrap 2025 - Your GitHub Year in Review',
     description: 'Create your personalized GitHub Wrapped 2025! Discover your coding stats, top languages, contribution streaks, and get hilariously roasted by AI.',
+    url: 'https://gitwrap.com', // Replace with your actual domain
+    siteName: 'GitWrap',
     images: [
       {
         url: '/og-gitwrap.png',
@@ -28,6 +30,15 @@ export const metadata: Metadata = {
         alt: 'GitWrap - Your year in code, wrapped.',
       },
     ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'GitWrap 2025 - Your GitHub Year in Review',
+    description: 'Create your personalized GitHub Wrapped 2025! Discover your coding stats, top languages, contribution streaks, and get hilariously roasted by AI.',
+    creator: '@GitWrap', // Replace with your actual Twitter handle
+    images: ['/og-gitwrap.png'],
   },
   appleWebApp: {
     capable: true,

@@ -35,6 +35,7 @@ export async function generateMetadata({ params }: { params: { username: string 
     openGraph: {
         title: `${username}'s GitHub Wrapped 2025`,
         description: description,
+        url: `https://gitwrap.com/wrapped/${username}`,
         // You could dynamically generate an Open Graph image for each user here
         images: [
             {
@@ -44,6 +45,15 @@ export async function generateMetadata({ params }: { params: { username: string 
                 alt: `GitWrap card for ${username}`,
             },
         ],
+        type: 'article',
+        authors: [username],
+    },
+     twitter: {
+      card: 'summary_large_image',
+      title: `${username}'s GitHub Wrapped 2025 | GitWrap`,
+      description: description,
+      creator: '@GitWrap', // Replace with your actual Twitter handle
+      images: ['/og-gitwrap.png'],
     },
   };
 }
