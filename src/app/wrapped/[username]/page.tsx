@@ -172,16 +172,16 @@ export default async function WrappedPage({ params }: { params: { username: stri
               <WrappedCard>
                 <div className="flex h-full flex-col items-center justify-center text-center">
                     <div className="flex flex-col items-center">
-                        <Avatar className="h-32 w-32 border-4 border-primary/50 mb-4">
+                        <Avatar className="h-32 w-32 md:h-40 md:w-40 border-4 border-primary/50 mb-4">
                             <AvatarImage src={githubData.avatarUrl} alt={githubData.name} />
                             <AvatarFallback>{githubData.name.charAt(0)}</AvatarFallback>
                         </Avatar>
-                        <h2 className="text-4xl font-bold text-white">{githubData.name}</h2>
-                        <p className="text-xl text-muted-foreground">@{githubData.username}</p>
-                        <h1 className="text-5xl font-bold bg-gradient-to-br from-white to-green-400 bg-clip-text text-transparent mt-8">
+                        <h2 className="text-4xl md:text-5xl font-bold text-white">{githubData.name}</h2>
+                        <p className="text-xl md:text-2xl text-muted-foreground">@{githubData.username}</p>
+                        <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-br from-white to-green-400 bg-clip-text text-transparent mt-8">
                             2025 GitHub Wrapped
                         </h1>
-                        <p className="mt-2 text-lg text-muted-foreground">Your year in code, unwrapped.</p>
+                        <p className="mt-2 text-lg md:text-xl text-muted-foreground">Your year in code, unwrapped.</p>
                     </div>
                     <div className="flex items-center gap-1 text-sm text-muted-foreground mt-24">
                        <p>SWIPE OR PRESS</p>
@@ -197,23 +197,23 @@ export default async function WrappedPage({ params }: { params: { username: stri
                <WrappedCard className="flex flex-col justify-center items-center text-center p-8">
                  <div className="absolute top-0 left-0 w-full h-full bg-[url('/circuit-board.svg')] bg-cover opacity-5 mix-blend-lighten z-0" />
                  <div className="z-10 flex flex-col items-center">
-                   <h2 className="text-2xl text-muted-foreground">In 2025, you made</h2>
-                   <div className="my-4 text-8xl font-black text-green-300"
+                   <h2 className="text-2xl md:text-3xl text-muted-foreground">In 2025, you made</h2>
+                   <div className="my-4 text-8xl md:text-9xl font-black text-green-300"
                      style={{
                        textShadow: '0 0 10px hsl(var(--primary)/0.5), 0 0 20px hsl(var(--primary)/0.3)',
                      }}
                    >
                      <NumberTicker value={githubData.commitCount} />
                    </div>
-                   <p className="text-6xl font-bold text-white/90">commits</p>
+                   <p className="text-6xl md:text-7xl font-bold text-white/90">commits</p>
 
-                   <div className="mt-6 space-y-1 text-lg">
+                   <div className="mt-6 space-y-1 text-lg md:text-xl">
                       <p>That's <span className="font-bold text-white">{(githubData.commitCount / 365).toFixed(1)} per day</span> on average!</p>
                       <p>Your best month? <span className="font-bold text-primary">{githubData.bestMonth} 🔥</span></p>
                    </div>
                  </div>
 
-                 <div className="w-full h-48 z-10 mt-12">
+                 <div className="w-full h-48 md:h-64 z-10 mt-12 max-w-4xl">
                     <ContributionGraph 
                       data={githubData.contributionData} 
                       bestMonth={githubData.bestMonth}
@@ -226,32 +226,32 @@ export default async function WrappedPage({ params }: { params: { username: stri
             <CarouselItem className="h-full">
               <WrappedCard className="flex flex-col items-center justify-center p-6 text-center">
                 <div className="absolute top-0 left-0 w-full h-full bg-[url('/circuit-board.svg')] bg-cover opacity-5 mix-blend-lighten z-0" />
-                <div className="z-10 w-full max-w-md">
-                  <h2 className="text-3xl font-bold mb-4">Your Language Journey</h2>
+                <div className="z-10 w-full max-w-md md:max-w-xl">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-8">Your Language Journey</h2>
                   
                   <Card className="bg-white/10 backdrop-blur-sm border-white/20 p-4 mb-6 relative">
                     <div className="flex items-center gap-4">
-                      <div className="size-16 rounded-full flex items-center justify-center text-background text-2xl font-bold" style={{ backgroundColor: topLangColor }}>
+                      <div className="size-16 md:size-20 rounded-full flex items-center justify-center text-background text-2xl md:text-3xl font-bold" style={{ backgroundColor: topLangColor }}>
                         {topLangAbbr}
                       </div>
                       <div>
-                        <h3 className="text-3xl font-bold text-left">{githubData.mostUsedLanguage}</h3>
-                        <p className="text-muted-foreground text-left">was your go-to in 2025.</p>
+                        <h3 className="text-3xl md:text-4xl font-bold text-left">{githubData.mostUsedLanguage}</h3>
+                        <p className="text-muted-foreground text-left md:text-lg">was your go-to in 2025.</p>
                       </div>
                     </div>
-                     <p className="text-lg text-muted-foreground mt-2">You wrote <span className="font-bold text-white">
+                     <p className="text-lg md:text-xl text-muted-foreground mt-2">You wrote <span className="font-bold text-white">
                       {(githubData.topLanguages.find(l => l.language === githubData.mostUsedLanguage)?.bytes || 0).toLocaleString()}
                       </span> lines of code.</p>
                     <Badge className="absolute top-3 right-3 bg-primary text-primary-foreground border-none">#1 TOP LANG</Badge>
                   </Card>
 
                   <Card className="bg-white/10 backdrop-blur-sm border-white/20 p-4 w-full">
-                    <h3 className="text-xl font-semibold mb-2">Distribution</h3>
-                    <div className="relative w-full h-48">
+                    <h3 className="text-xl md:text-2xl font-semibold mb-2">Distribution</h3>
+                    <div className="relative w-full h-48 md:h-56">
                       <LanguageChart data={topLangs} />
                       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                        <span className="text-4xl font-bold">{topLangs.length}</span>
-                        <span className="text-muted-foreground">LANGS</span>
+                        <span className="text-4xl md:text-5xl font-bold">{topLangs.length}</span>
+                        <span className="text-muted-foreground md:text-lg">LANGS</span>
                       </div>
                     </div>
                      <div className="mt-4 flex flex-wrap justify-center gap-x-3 gap-y-2">
@@ -273,34 +273,34 @@ export default async function WrappedPage({ params }: { params: { username: stri
              {/* Card 4: Streak Highlight */}
             <CarouselItem className="h-full">
                <WrappedCard className="flex flex-col items-center justify-center p-8 text-center">
-                <h2 className="text-4xl font-bold mb-8">Streak Highlight</h2>
+                <h2 className="text-4xl md:text-5xl font-bold mb-8">Streak Highlight</h2>
                 
                 <div className="flex items-center justify-center gap-4">
-                  <Flame className="size-20 text-orange-500" style={{ filter: 'drop-shadow(0 0 10px #F59E0B)'}}/>
+                  <Flame className="size-20 md:size-24 text-orange-500" style={{ filter: 'drop-shadow(0 0 10px #F59E0B)'}}/>
                   <div>
-                    <p className="text-8xl font-black text-green-400" style={{ textShadow: '0 0 10px hsla(148, 99%, 46%, 0.7)'}}>
+                    <p className="text-8xl md:text-9xl font-black text-green-400" style={{ textShadow: '0 0 10px hsla(148, 99%, 46%, 0.7)'}}>
                       <NumberTicker value={githubData.longestStreak} />
-                      <span className="text-5xl ml-2">DAYS</span>
+                      <span className="text-5xl md:text-6xl ml-2">DAYS</span>
                     </p>
-                    <p className="text-xl text-muted-foreground">Longest Streak</p>
+                    <p className="text-xl md:text-2xl text-muted-foreground">Longest Streak</p>
                   </div>
                 </div>
 
                 <div className="mt-8 flex items-center justify-center gap-3">
-                    <Flame className="size-8 text-orange-400" />
+                    <Flame className="size-8 md:size-10 text-orange-400" />
                     <div>
-                        <p className="text-3xl font-bold">
+                        <p className="text-3xl md:text-4xl font-bold">
                             <NumberTicker value={githubData.currentStreak} />
                         </p>
-                        <p className="text-sm text-muted-foreground">Current Streak</p>
+                        <p className="text-sm md:text-base text-muted-foreground">Current Streak</p>
                     </div>
                 </div>
 
-                <p className="mt-8 text-lg text-foreground/80 max-w-sm">
+                <p className="mt-8 text-lg md:text-xl text-foreground/80 max-w-md">
                   Consistency is key! Your dedication to coding every day is inspiring.
                 </p>
 
-                <div className="mt-8 w-full max-w-xl">
+                <div className="mt-8 w-full max-w-xl md:max-w-3xl">
                   <ContributionHeatmap data={githubData.contributionData} />
                 </div>
               </WrappedCard>
@@ -309,33 +309,33 @@ export default async function WrappedPage({ params }: { params: { username: stri
             {/* Card 5: Repository Highlights */}
             <CarouselItem className="h-full">
               <WrappedCard className="flex flex-col items-center justify-center p-6 text-center">
-                <h2 className="text-4xl font-bold mb-8">Repository Highlights</h2>
-                  <p className="max-w-xl text-lg text-muted-foreground mb-8">
+                <h2 className="text-4xl md:text-5xl font-bold mb-8">Repository Highlights</h2>
+                  <p className="max-w-xl text-lg md:text-xl text-muted-foreground mb-8">
                     Your impact on open source was electric this year. Here's the code that defined your 2025 journey.
                   </p>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-4xl">
                   <Card className="bg-card/50 text-center flex flex-col justify-center items-center p-6">
-                      <Star className="size-10 text-primary mb-4"/>
-                      <p className="text-4xl font-black text-white"><NumberTicker value={githubData.totalStars} /></p>
-                      <p className="text-lg text-muted-foreground">Stars Earned</p>
+                      <Star className="size-10 md:size-12 text-primary mb-4"/>
+                      <p className="text-4xl md:text-5xl font-black text-white"><NumberTicker value={githubData.totalStars} /></p>
+                      <p className="text-lg md:text-xl text-muted-foreground">Stars Earned</p>
                   </Card>
                    <Card className="bg-card/50 text-center flex flex-col justify-center items-center p-6">
-                      <Github className="size-10 text-primary mb-4"/>
-                      <p className="text-4xl font-black text-white"><NumberTicker value={githubData.reposCreated} /></p>
-                      <p className="text-lg text-muted-foreground">New Repos</p>
+                      <Github className="size-10 md:size-12 text-primary mb-4"/>
+                      <p className="text-4xl md:text-5xl font-black text-white"><NumberTicker value={githubData.reposCreated} /></p>
+                      <p className="text-lg md:text-xl text-muted-foreground">New Repos</p>
                   </Card>
                   <Card className="bg-card/50 text-center flex flex-col justify-center items-center p-6">
-                      <GitFork className="size-10 text-primary mb-4"/>
-                      <p className="text-4xl font-black text-white"><NumberTicker value={githubData.forks} /></p>
-                      <p className="text-lg text-muted-foreground">Total Forks</p>
+                      <GitFork className="size-10 md:size-12 text-primary mb-4"/>
+                      <p className="text-4xl md:text-5xl font-black text-white"><NumberTicker value={githubData.forks} /></p>
+                      <p className="text-lg md:text-xl text-muted-foreground">Total Forks</p>
                   </Card>
                   <Card className="bg-card/50 text-center flex flex-col justify-center items-center p-6">
-                      <Users className="size-10 text-primary mb-4"/>
-                      <p className="text-4xl font-black text-white"><NumberTicker value={githubData.followers} /></p>
-                      <p className="text-lg text-muted-foreground">Followers</p>
+                      <Users className="size-10 md:size-12 text-primary mb-4"/>
+                      <p className="text-4xl md:text-5xl font-black text-white"><NumberTicker value={githubData.followers} /></p>
+                      <p className="text-lg md:text-xl text-muted-foreground">Followers</p>
                   </Card>
                 </div>
-                 <p className="text-lg text-foreground mt-8">Your most committed repo: <span className="font-bold text-primary">{githubData.mostCommittedRepo || 'N/A'}</span></p>
+                 <p className="text-lg md:text-xl text-foreground mt-8">Your most committed repo: <span className="font-bold text-primary">{githubData.mostCommittedRepo || 'N/A'}</span></p>
               </WrappedCard>
             </CarouselItem>
 
@@ -343,9 +343,9 @@ export default async function WrappedPage({ params }: { params: { username: stri
             <CarouselItem className="h-full">
               <WrappedCard>
                 <div className="relative flex h-full flex-col items-center justify-center text-center">
-                  <div className="relative w-full max-w-2xl rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-lg">
+                  <div className="relative w-full max-w-2xl md:max-w-3xl rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-lg">
                     <p className="absolute -top-8 left-4 text-8xl font-black text-primary/50">“</p>
-                    <p className="text-base sm:text-xl font-bold italic leading-relaxed text-white/90 text-left">{roast}</p>
+                    <p className="text-xl sm:text-2xl font-bold italic leading-relaxed text-white/90 text-left">{roast}</p>
                     <p className="absolute -bottom-8 right-4 text-8xl font-black text-primary/50">”</p>
                      <p className="mt-6 text-sm italic text-primary">— Roasted by Groq</p>
                   </div>
@@ -357,9 +357,9 @@ export default async function WrappedPage({ params }: { params: { username: stri
              <CarouselItem className="h-full">
               <WrappedCard>
                 <div className="flex h-full flex-col items-center justify-center text-center p-6">
-                  <h2 className="text-3xl font-bold mb-2">Achievements</h2>
-                  <p className="text-muted-foreground mb-8">Your 2025 Coding Milestones</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xl">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Achievements</h2>
+                  <p className="text-muted-foreground mb-8 md:text-lg">Your 2025 Coding Milestones</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xl md:max-w-2xl">
                     {achievements.map((achievement, i) => (
                       <AchievementCard 
                         key={i} 
@@ -379,7 +379,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
             <CarouselItem className="h-full">
                 <WrappedCard>
                     <div className="flex h-full flex-col items-center justify-center text-center">
-                        <h2 className="text-3xl font-bold mb-8">Share Your Wrap</h2>
+                        <h2 className="text-3xl md:text-4xl font-bold mb-8">Share Your Wrap</h2>
                         <ExportCard data={githubData} roast={roast} />
                     </div>
                 </WrappedCard>

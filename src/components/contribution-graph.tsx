@@ -45,7 +45,7 @@ export function ContributionGraph({ data, bestMonth }: ContributionGraphProps) {
             <CartesianGrid vertical={false} stroke="hsl(var(--muted-foreground)/.1)" />
             <XAxis
               dataKey="shortName"
-              tickFormatter={(value) => value.charAt(0)}
+              tickFormatter={(value) => value}
               stroke="hsl(var(--muted-foreground))"
               fontSize={12}
               tickLine={false}
