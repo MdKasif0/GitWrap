@@ -1,19 +1,23 @@
 import { Button } from "./ui/button";
 import { Logo } from "./logo";
 import Link from "next/link";
-import { Coffee } from "lucide-react";
+import { Coffee, Share2 } from "lucide-react";
+import { ShareButton } from "./share-button";
 
 export function Header() {
   return (
     <header className="absolute top-0 left-0 right-0 z-20 p-4 flex justify-between items-center">
       <Logo />
       <div className="flex items-center gap-2">
-        <Button variant="ghost" asChild>
+         <Button variant="outline" asChild className="border-primary/50 bg-transparent hover:bg-primary/10 transition-colors duration-300">
           <Link href="/support" aria-label="Support page">
-            <Coffee />
-            Buy me a Coffee
+            <Coffee className="text-primary" />
+            <span className="ml-2 bg-gradient-to-r from-green-400 to-primary bg-clip-text text-transparent font-semibold">
+              Buy me a Coffee
+            </span>
           </Link>
         </Button>
+        <ShareButton />
       </div>
     </header>
   );
