@@ -1,15 +1,22 @@
 'use server';
 
 /**
- * @fileOverview Generates a humorous roast and personalized achievements from a user's GitHub activity data.
+ * @fileOverview Generates a humorous roast and personalized achievements from a user's GitHub activity data using the Groq API.
  *
  * - generateWrap - A function that generates the roast and achievements.
  * - GenerateWrapInput - The input type for the generateWrap function.
  * - GenerateWrapOutput - The return type for the generateWrap function.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import {z} from 'zod';
+import Groq from 'groq-sdk';
+import {config} from 'dotenv';
+
+config();
+
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
 
 const GenerateWrapInputSchema = z.object({
   username: z.string().describe('The GitHub username of the user.'),
@@ -49,34 +56,28 @@ const GenerateWrapOutputSchema = z.object({
 });
 export type GenerateWrapOutput = z.infer<typeof GenerateWrapOutputSchema>;
 
-export async function generateWrap(
-  input: GenerateWrapInput
-): Promise<GenerateWrapOutput> {
-  return generateWrapFlow(input);
-}
-
-const generateWrapPrompt = ai.definePrompt({
-  name: 'generateWrapPrompt',
-  input: {schema: GenerateWrapInputSchema},
-  output: {schema: GenerateWrapOutputSchema},
-  prompt: `You are a brutally honest and sarcastic code critic. Your job is to analyze a GitHub user's 2025 activity and generate a JSON object containing:
+function buildPrompt(input: GenerateWrapInput): string {
+  return `You are a brutally honest and sarcastic code critic. Your job is to analyze a GitHub user's 2025 activity and generate a JSON object containing:
 1.  A "roast": An unfiltered, brutally honest, and savage 2-3 line roast. It should be funny because it's true.
 2.  An "achievements" array: exactly 4 personalized (but still slightly backhanded) achievements with an icon, title, description, rarity, and color.
 
 User Data:
-- Username: {{{username}}}
-- Contribution Count: {{{contributionCount}}}
-- Commit Count: {{{commitCount}}}
-- Top Language: {{{mostUsedLanguage}}}
-- Recent Commit Messages: {{{commitMessages}}}
-- Repository Names: {{{repos}}}
+- Username: ${input.username}
+- Contribution Count: ${input.contributionCount}
+- Commit Count: ${input.commitCount}
+- Top Language: ${input.mostUsedLanguage}
+- Recent Commit Messages: ${JSON.stringify(input.commitMessages)}
+- Repository Names: ${JSON.stringify(input.repos)}
+
+Your response MUST be a valid JSON object that conforms to this Zod schema:
+${JSON.stringify(GenerateWrapOutputSchema.shape, null, 2)}
 
 ROAST GUIDELINES:
 - Be 2-3 lines maximum.
 - Be unfiltered, brutally honest, and savage. Don't hold back.
 - Use programming humor and technical references to highlight their flaws.
 - Point out questionable patterns from their data (e.g., low commit count, generic commit messages, using an old language).
-- Example Style: "{{{contributionCount}}} contributions? I've seen more activity in a commented-out block of code. And your top language is {{{mostUsedLanguage}}}? Are you preserving a digital fossil?"
+- Example Style: "${input.contributionCount} contributions? I've seen more activity in a commented-out block of code. And your top language is ${input.mostUsedLanguage}? Are you preserving a digital fossil?"
 
 ACHIEVEMENT GUIDELINES:
 - Generate exactly 4 unique achievements.
@@ -92,23 +93,13 @@ ACHIEVEMENT GUIDELINES:
     "rarity": "Common",
     "color": "gray"
   }
-`,
-  config: {
-    temperature: 0.8,
-  },
-});
 
-const generateWrapFlow = ai.defineFlow(
-  {
-    name: 'generateWrapFlow',
-    inputSchema: GenerateWrapInputSchema,
-    outputSchema: GenerateWrapOutputSchema,
-  },
-  async input => {
-    const {output} = await generateWrapPrompt(input);
-    if (!output) {
-      // Fallback in case the AI fails
-      return {
+Return ONLY the JSON object, with no other text before or after it.
+`;
+}
+
+async function fallbackResponse(): Promise<GenerateWrapOutput> {
+    return {
         roast:
           "My AI is too scared to roast you. You must be a 10x developer... or you have an empty GitHub profile. One of the two.",
         achievements: [
@@ -142,7 +133,37 @@ const generateWrapFlow = ai.defineFlow(
           },
         ],
       };
+}
+
+export async function generateWrap(
+  input: GenerateWrapInput
+): Promise<GenerateWrapOutput> {
+  const prompt = buildPrompt(input);
+
+  try {
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: 'user', content: prompt }],
+      model: 'llama3-8b-8192', // Or another model like 'mixtral-8x7b-32768'
+      temperature: 0.8,
+      response_format: { type: 'json_object' },
+    });
+
+    const content = chatCompletion.choices[0]?.message?.content;
+    if (!content) {
+      console.warn('Groq API returned no content, using fallback.');
+      return fallbackResponse();
     }
+    
+    const parsedOutput = JSON.parse(content);
+    const validationResult = GenerateWrapOutputSchema.safeParse(parsedOutput);
+
+    if (!validationResult.success) {
+        console.error('Groq response failed Zod validation:', validationResult.error);
+        return fallbackResponse();
+    }
+    
+    let output = validationResult.data;
+    
     // Ensure we always return exactly 4 achievements
     if (output.achievements.length > 4) {
       output.achievements = output.achievements.slice(0, 4);
@@ -158,5 +179,9 @@ const generateWrapFlow = ai.defineFlow(
     }
 
     return output;
+
+  } catch (error) {
+    console.error('Error calling Groq API:', error);
+    return fallbackResponse();
   }
-);
+}
