@@ -1,4 +1,5 @@
 
+
 import type { Metadata } from 'next';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
@@ -35,7 +36,7 @@ export async function generateMetadata({ params }: { params: { username: string 
     openGraph: {
         title: `${username}'s GitHub Wrapped 2025`,
         description: description,
-        url: `https://gitwrap.com/wrapped/${username}`,
+        url: `https://gitwrap.com/wrapped/${username}`, // Replace with your actual domain
         // You could dynamically generate an Open Graph image for each user here
         images: [
             {
@@ -119,8 +120,56 @@ export default async function WrappedPage({ params }: { params: { username: stri
   
   const totalLangBytes = githubData.topLanguages.reduce((sum, lang) => sum + lang.bytes, 0);
 
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": `${githubData.name}'s GitHub Wrapped 2025`,
+      "description": `GitHub statistics and coding analytics for ${githubData.name} in 2025.`,
+      "image": `https://gitwrap.com/api/og/${githubData.username}`, // Replace with your actual domain
+      "author": {
+        "@type": "Person",
+        "name": githubData.name,
+        "url": `https://github.com/${githubData.username}`
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "GitWrap",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://gitwrap.com/gitwrap.png" // Replace with your actual domain
+        }
+      },
+      "datePublished": "2025-01-01",
+      "dateModified": new Date().toISOString()
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://gitwrap.com" // Replace with your actual domain
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": githubData.username,
+          "item": `https://gitwrap.com/wrapped/${githubData.username}` // Replace with your actual domain
+        }
+      ]
+    }
+  ];
+
 
   return (
+    <>
+    <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+    />
     <div className="relative flex h-screen w-screen flex-col items-center justify-center overflow-hidden bg-background">
        <div className="pointer-events-none absolute inset-0 z-0 h-full w-full bg-black">
         <div className="absolute inset-0 z-0 bg-[url('https://firebasestudio.app/assets/bg-stars.svg')] bg-repeat"></div>
@@ -375,5 +424,6 @@ export default async function WrappedPage({ params }: { params: { username: stri
         </Carousel>
       </main>
     </div>
+    </>
   );
 }

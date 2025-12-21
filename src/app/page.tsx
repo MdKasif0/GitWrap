@@ -1,4 +1,5 @@
 
+
 import { GithubForm } from "@/components/github-form";
 import { AnimatedBackground } from "@/components/animated-background";
 import { FeatureCard } from "@/components/feature-card";
@@ -33,7 +34,59 @@ export default function Home() {
     },
   ];
 
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "GitWrap",
+      "alternateName": "GitHub Wrapped 2025",
+      "url": "https://gitwrap.com", // Replace with your actual domain
+      "description": "Create your personalized GitHub Wrapped 2025. Analyze your coding stats, top languages, contribution streaks, and get roasted by AI.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://gitwrap.com/wrapped/{search_term_string}" // Replace with your actual domain
+        },
+        "query-input": "required name=search_term_string"
+      },
+       "sameAs": [
+        "https://twitter.com/GitWrap", // Replace with your actual handle
+        "https://github.com/your-org/gitwrap" // Replace with your actual repo
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "GitWrap",
+      "url": "https://gitwrap.com", // Replace with your actual domain
+      "logo": "https://gitwrap.com/gitwrap.png", // Replace with your actual domain
+      "description": "GitWrap creates personalized GitHub year-in-review experiences for developers.",
+      "sameAs": [
+        "https://twitter.com/GitWrap" // Replace with your actual handle
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "GitWrap",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "browserRequirements": "Requires JavaScript. Works on Chrome, Firefox, Safari, Edge."
+    }
+  ];
+
   return (
+    <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+    />
     <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background p-4 pt-24">
       <Header />
       <AnimatedBackground />
@@ -68,5 +121,6 @@ export default function Home() {
         </div>
       </div>
     </main>
+    </>
   );
 }
