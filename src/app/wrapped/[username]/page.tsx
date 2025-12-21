@@ -13,13 +13,14 @@ import { WrappedCard } from "@/components/wrapped-card";
 import NumberTicker from "@/components/number-ticker";
 import { LanguageChart, LANGUAGE_COLORS } from "@/components/language-chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { generateGitHubRoast } from "@/ai/flows/generate-github-roast";
 import { GiftIcon } from "@/components/icons/gift-icon";
 import { Badge } from "@/components/ui/badge";
 import { ContributionHeatmap } from "@/components/contribution-heatmap";
 import { AchievementCard } from "@/components/achievement-card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Download, Link as LinkIcon, Twitter } from 'lucide-react';
+import { generateWrap } from '@/ai/flows/generate-wrap';
+import type { GenerateWrapOutput } from '@/ai/flows/generate-wrap';
 
 
 export async function generateMetadata({ params }: { params: { username: string } }): Promise<Metadata> {
@@ -56,44 +57,29 @@ export async function generateMetadata({ params }: { params: { username: string 
   };
 }
 
+const achievementIcons: { [key: string]: React.ReactNode } = {
+  Trophy: <Trophy />,
+  Flame: <Flame />,
+  BrainCircuit: <BrainCircuit />,
+  GitPullRequest: <GitPullRequest />,
+  Rocket: <Rocket />,
+  Code: <Code />,
+};
 
 export default async function WrappedPage({ params }: { params: { username: string } }) {
   const githubData = await fetchGitHubData(params.username);
   
-  const roast = "With all those commits, your keyboard must be begging for a vacation. At least you're keeping the 'git blame' command interesting!";
+  const aiData: GenerateWrapOutput = await generateWrap({
+    username: githubData.username,
+    contributionCount: githubData.contributionCount,
+    commitCount: githubData.commitCount,
+    mostUsedLanguage: githubData.mostUsedLanguage,
+    commitMessages: githubData.commitMessages,
+    repos: githubData.repoNames,
+  });
+
+  const { roast, achievements } = aiData;
   
-  const achievements = [
-    {
-      icon: <Trophy className="text-yellow-400" />,
-      title: 'Open Source Titan',
-      description: 'Contributed to 50+ projects, a true legend.',
-      rarity: 'Legendary',
-      color: 'yellow'
-    },
-    {
-      icon: <Flame className="text-purple-400" />,
-      title: 'Commit Streak Master',
-      description: 'Achieved a 365-day commit streak!',
-      rarity: 'Epic',
-      color: 'purple'
-    },
-    {
-      icon: <BrainCircuit className="text-blue-400" />,
-      title: 'Language Polyglot',
-      description: 'Coded in 10+ different languages this year.',
-      rarity: 'Rare',
-      color: 'blue'
-    },
-    {
-      icon: <GitPullRequest className="text-gray-400" />,
-      title: 'Pull Request Pro',
-      description: "Merged 200+ pull requests.",
-      rarity: 'Common',
-      color: 'gray'
-    },
-  ];
-
-
   const topLangs = githubData.topLanguages.slice(0, 5);
 
   const getLangAbbreviation = (lang: string) => {
@@ -375,7 +361,14 @@ export default async function WrappedPage({ params }: { params: { username: stri
                   <p className="text-muted-foreground mb-8">Your 2025 Coding Milestones</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xl">
                     {achievements.map((achievement, i) => (
-                      <AchievementCard key={i} {...achievement} />
+                      <AchievementCard 
+                        key={i} 
+                        icon={achievementIcons[achievement.icon] || <GitPullRequest />}
+                        title={achievement.title}
+                        description={achievement.description}
+                        rarity={achievement.rarity}
+                        color={achievement.color}
+                      />
                     ))}
                   </div>
                 </div>
