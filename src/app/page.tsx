@@ -6,6 +6,7 @@ import { StatsIcon } from "@/components/icons/stats-icon";
 import { AchievementsIcon } from "@/components/icons/achievements-icon";
 import { SeriousnessIcon } from "@/components/icons/seriousness-icon";
 import { ShareIcon } from "@/components/icons/share-icon";
+import Image from "next/image";
 
 export default function Home() {
   const features = [
@@ -51,8 +52,9 @@ export default function Home() {
             href="https://gitroasted.netlify.app"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-6 text-xl font-bold transition-transform hover:scale-105 bg-gradient-to-r from-orange-500 via-pink-500 to-fuchsia-500 bg-clip-text text-transparent"
+            className="mt-6 flex items-center gap-2 text-xl font-bold transition-transform hover:scale-105 bg-gradient-to-r from-orange-500 via-pink-500 to-fuchsia-500 bg-clip-text text-transparent"
           >
+            <Image src="/gitroasted.png" alt="GitRoasted Logo" width={24} height={24} />
             Try GitRoasted
           </a>
         </div>
