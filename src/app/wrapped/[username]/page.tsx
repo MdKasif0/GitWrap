@@ -1,5 +1,6 @@
 
 
+
 import type { Metadata } from 'next';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
@@ -290,7 +291,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
                    <Flame className="size-8 text-orange-400" />
                    <div>
                       <p className="text-3xl font-bold">
-                        <NumberTicker value={42} />
+                        <NumberTicker value={githubData.currentStreak} />
                       </p>
                       <p className="text-sm text-muted-foreground">Current Streak</p>
                    </div>
@@ -345,7 +346,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
                 <div className="relative flex h-full flex-col items-center justify-center text-center">
                   <div className="relative w-full max-w-2xl rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-lg">
                     <p className="absolute -top-8 left-4 text-8xl font-black text-primary/50">“</p>
-                    <p className="text-2xl sm:text-3xl font-bold italic leading-relaxed text-white/90">{roast}</p>
+                    <p className="text-xl sm:text-2xl font-bold italic leading-relaxed text-white/90">{roast}</p>
                     <p className="absolute -bottom-8 right-4 text-8xl font-black text-primary/50">”</p>
                      <p className="mt-6 text-sm italic text-primary">— Roasted by Gemini</p>
                   </div>

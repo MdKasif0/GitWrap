@@ -1,6 +1,7 @@
 
 
 
+
 import { PlaceHolderImages } from './placeholder-images';
 
 export type GitHubData = {
@@ -12,6 +13,7 @@ export type GitHubData = {
   mostUsedLanguage: string;
   contributionData: Array<{ date: string; count: number }>;
   longestStreak: number;
+  currentStreak: number;
   mostProductiveDay: string;
   bestMonth: string;
   topLanguages: { language: string, percentage: number, bytes: number }[];
@@ -62,12 +64,30 @@ async function fetchFromGitHubGraphQL(query: string, variables: Record<string, a
   return response.json();
 }
 
+const getCurrentStreak = (contributionDates: Set<string>): number => {
+    let currentStreak = 0;
+    const today = new Date();
+    // Check if there was a contribution today. If not, start checking from yesterday.
+    const startDate = contributionDates.has(today.toISOString().split('T')[0]) ? today : new Date(today.setDate(today.getDate() -1));
 
-const getLongestStreak = (data: Array<{ date: string; count: number }>): number => {
+    for (let i = 0; i < 365; i++) {
+        const d = new Date(startDate);
+        d.setDate(startDate.getDate() - i);
+        const dateString = d.toISOString().split('T')[0];
+
+        if (contributionDates.has(dateString)) {
+            currentStreak++;
+        } else {
+            break;
+        }
+    }
+    return currentStreak;
+};
+
+
+const getLongestStreak = (contributionDates: Set<string>): number => {
     let longestStreak = 0;
     let currentStreak = 0;
-    // Create a set of dates with contributions for quick lookups
-    const contributionDates = new Set(data.filter(d => d.count > 0).map(d => d.date));
     
     const startDate = new Date('2025-01-01');
     for (let i = 0; i < 365; i++) {
@@ -201,6 +221,9 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
     date: day.date,
     count: day.contributionCount
   })));
+  
+  const contributionDates = new Set(contributionData.filter(d => d.count > 0).map(d => d.date));
+
 
   const languages: { [lang: string]: number } = {};
   let mostCommittedRepo = '';
@@ -264,7 +287,8 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
     commitCount: contribCollection.totalCommitContributions,
     mostUsedLanguage,
     contributionData,
-    longestStreak: getLongestStreak(contributionData),
+    longestStreak: getLongestStreak(contributionDates),
+    currentStreak: getCurrentStreak(contributionDates),
     mostProductiveDay: getMostProductiveDay(contributionData),
     bestMonth: getBestMonth(contributionData),
     topLanguages,
@@ -279,4 +303,3 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
     forks,
   };
 }
-
