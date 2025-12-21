@@ -3,7 +3,7 @@
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { ChevronLeft } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { useRef } from "react";
 
 type HeatmapProps = {
@@ -144,7 +144,7 @@ export function ContributionHeatmap({ data }: HeatmapProps) {
           onClick={handleScroll}
           className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-opacity hover:bg-black/80 md:hidden"
         >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronRight className="h-4 w-4" />
         </button>
       </div>
     </TooltipProvider>
