@@ -9,12 +9,24 @@ export const metadata: Metadata = {
   title: 'GitWrap',
   description: 'Your year in code, wrapped.',
   manifest: '/manifest.json',
+  openGraph: {
+    title: 'GitWrap',
+    description: 'Your year in code, wrapped.',
+    images: [
+      {
+        url: '/og-gitwrap.png',
+        width: 1200,
+        height: 630,
+        alt: 'GitWrap - Your year in code, wrapped.',
+      },
+    ],
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
   },
   icons: {
-    apple: "/apple-touch-icon.png",
+    apple: "/gitwrap.png",
   }
 };
 
