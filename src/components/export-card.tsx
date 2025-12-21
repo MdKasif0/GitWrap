@@ -119,7 +119,7 @@ export function ExportCard({ data, roast, isModalVersion = false }: ExportCardPr
         ref={cardRef}
         className="w-full"
       >
-        <Card className="bg-black border-purple-500/20 shadow-2xl overflow-hidden">
+        <Card className="bg-black border-purple-500/20 shadow-2xl">
           <CardContent className="flex flex-col gap-6 p-8 items-center text-center">
             
             <div className="flex flex-col items-center gap-2">
