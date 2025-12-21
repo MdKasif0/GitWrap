@@ -17,7 +17,6 @@ export default function SupportPage() {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
   const upiId = 'your-upi-id@fam';
-  const supporterCount = 137; // Static number for now
 
   const handleCopy = () => {
     navigator.clipboard.writeText(upiId);
@@ -98,10 +97,6 @@ export default function SupportPage() {
           <p className="mt-2 text-muted-foreground max-w-lg mx-auto">
             Your support helps us dedicate more time to building awesome new features, maintaining the servers, and keeping GitWrap free for everyone.
           </p>
-          <div className="mt-6 flex items-center justify-center gap-2 font-bold text-lg text-primary">
-            <Heart className="fill-current" />
-            <p>Join {supporterCount} other developers who have supported!</p>
-          </div>
         </div>
         
         <Separator className="my-8 bg-white/10" />
