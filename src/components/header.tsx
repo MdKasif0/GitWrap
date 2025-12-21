@@ -1,6 +1,5 @@
 import { Button } from "./ui/button";
 import { Logo } from "./logo";
-import { ShareButton } from "./share-button";
 import Link from "next/link";
 import { Coffee } from "lucide-react";
 
@@ -14,7 +13,6 @@ export function Header() {
             <Coffee />
           </Link>
         </Button>
-        <ShareButton />
       </div>
     </header>
   );
