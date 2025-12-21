@@ -48,7 +48,7 @@ export default function RootLayout({
       <head>
         <meta name="theme-color" content="#0a0a0a" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#8b5cf6" />
-        <meta http-equiv="content-language" content="en-US" />
+        <meta httpEquiv="content-language" content="en-US" />
         <meta name="author" content="GitWrap" />
         <meta name="referrer" content="origin-when-cross-origin" />
         <meta name="format-detection" content="telephone=no" />
