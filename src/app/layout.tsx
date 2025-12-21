@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: 'GitWrap',
     images: [
       {
-        url: '/og-gitwrap.png',
+        url: 'https://gitwrap.netlify.app/og-gitwrap.png',
         width: 1200,
         height: 630,
         alt: 'GitWrap - Your year in code, wrapped.',
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: 'GitWrap 2025 - Your GitHub Year in Review',
     description: 'Create your personalized GitHub Wrapped 2025! Discover your coding stats, top languages, contribution streaks, and get hilariously roasted by AI.',
     creator: '@GitWrap',
-    images: ['/og-gitwrap.png'],
+    images: ['https://gitwrap.netlify.app/og-gitwrap.png'],
   },
   appleWebApp: {
     capable: true,
