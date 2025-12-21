@@ -1,5 +1,6 @@
 
 
+
 import type { Metadata } from 'next';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
@@ -71,6 +72,9 @@ export default async function WrappedPage({ params }: { params: { username: stri
   
   const aiData: GenerateWrapOutput = await generateWrap({
     username: githubData.username,
+    bio: githubData.bio,
+    followers: githubData.followers,
+    totalStars: githubData.totalStars,
     contributionCount: githubData.contributionCount,
     commitCount: githubData.commitCount,
     mostUsedLanguage: githubData.mostUsedLanguage,
@@ -178,6 +182,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
                         </Avatar>
                         <h2 className="text-4xl md:text-5xl font-bold text-white">{githubData.name}</h2>
                         <p className="text-xl md:text-2xl text-muted-foreground">@{githubData.username}</p>
+                        {githubData.bio && <p className="mt-4 max-w-md text-lg text-foreground/80 italic">"{githubData.bio}"</p>}
                         <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-br from-white to-green-400 bg-clip-text text-transparent mt-8">
                             2025 GitHub Wrapped
                         </h1>

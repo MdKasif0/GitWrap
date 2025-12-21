@@ -21,6 +21,9 @@ const groq = new Groq({
 
 const GenerateWrapInputSchema = z.object({
   username: z.string().describe('The GitHub username of the user.'),
+  bio: z.string().nullable().describe("The user's GitHub bio."),
+  followers: z.number().describe('The number of followers the user has.'),
+  totalStars: z.number().describe('Total stars the user has received.'),
   contributionCount: z
     .number()
     .describe('Total number of contributions made by the user.'),
@@ -81,13 +84,16 @@ function buildPrompt(input: GenerateWrapInput): string {
     2
   );
 
-  return `You are a brutally honest and sarcastic code critic. Your job is to analyze a GitHub user's 2025 activity and generate a JSON object.
+  return `You are a brutally honest, savage, and sarcastic code critic. Your job is to analyze a GitHub user's 2025 activity and generate a JSON object.
 
 Your response MUST be a single, valid JSON object and nothing else. The JSON object must conform to the following structure:
 ${schemaString}
 
 User Data:
 - Username: ${input.username}
+- Bio: ${input.bio || 'Not provided'}
+- Followers: ${input.followers}
+- Total Stars: ${input.totalStars}
 - Contribution Count: ${input.contributionCount}
 - Commit Count: ${input.commitCount}
 - Top Language: ${input.mostUsedLanguage}
@@ -95,11 +101,12 @@ User Data:
 - Repository Names: ${JSON.stringify(input.repos)}
 
 ROAST GUIDELINES:
+- BE BRUTAL, SAVAGE, AND PERSONAL. Use the user's bio, follower count, and other specific stats to make the roast hit hard.
 - Generate a "longRoast": An unfiltered, brutally honest, and savage roast of 35-45 words for a large display card.
 - Generate a "shortRoast": A concise, witty, and savage roast of 15-20 words for a smaller, shareable card.
 - Use programming humor and technical references to highlight their flaws.
-- Example Long Roast: "${input.contributionCount} contributions? I've seen more activity in a commented-out block of legacy code. Your GitHub graph looks less like a developer's and more like a flatline, with occasional blips of 'Initial commit' and 'fix typo'."
-- Example Short Roast: "With ${input.commitCount} commits, you've successfully proven that even with version control, some mistakes are permanent."
+- Example Long Roast: "With a bio that screams 'aspiring code ninja' and ${input.followers} followers, you've mastered the art of social networking more than programming. ${input.contributionCount} contributions? I've seen more activity in a commented-out block of legacy code."
+- Example Short Roast: "All those stars and you still write code that looks like a black hole. Your GitHub is where good intentions go to die."
 
 ACHIEVEMENT GUIDELINES:
 - Generate an "achievements" array with exactly 4 unique objects.
@@ -156,7 +163,7 @@ export async function generateWrap(
   try {
     const chatCompletion = await groq.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],
-      model: 'qwen/qwen3-32b',
+      model: 'llama3-70b-8192',
       temperature: 0.8,
       response_format: { type: 'json_object' },
     });

@@ -2,12 +2,14 @@
 
 
 
+
 import { PlaceHolderImages } from './placeholder-images';
 
 export type GitHubData = {
   name: string;
   username: string;
   avatarUrl: string;
+  bio: string | null;
   contributionCount: number;
   commitCount: number;
   mostUsedLanguage: string;
@@ -152,6 +154,7 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
       user(login: $username) {
         name
         avatarUrl
+        bio
         followers {
           totalCount
         }
@@ -283,6 +286,7 @@ export async function fetchGitHubData(username: string): Promise<GitHubData> {
     name: user.name || username,
     username,
     avatarUrl: user.avatarUrl,
+    bio: user.bio,
     contributionCount: contributionCalendar.totalContributions,
     commitCount: contribCollection.totalCommitContributions,
     mostUsedLanguage,
