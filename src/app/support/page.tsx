@@ -4,7 +4,6 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Header } from '@/components/header';
 import { AnimatedBackground } from '@/components/animated-background';
 import { ArrowLeft, Copy, Check, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -30,10 +29,9 @@ export default function SupportPage() {
 
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background p-4">
-      <Header />
       <AnimatedBackground />
 
-      <Link href="/" className="absolute top-20 left-4 z-20 sm:top-4">
+      <Link href="/" className="absolute top-4 left-4 z-20">
         <Button variant="ghost" size="icon">
           <ArrowLeft className="h-4 w-4" />
         </Button>
