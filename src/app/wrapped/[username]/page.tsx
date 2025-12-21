@@ -347,7 +347,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
                     <p className="absolute -top-8 left-4 text-8xl font-black text-primary/50">“</p>
                     <p className="text-xl sm:text-2xl font-bold italic leading-relaxed text-white/90 text-left">{roast}</p>
                     <p className="absolute -bottom-8 right-4 text-8xl font-black text-primary/50">”</p>
-                     <p className="mt-6 text-sm italic text-primary">— Roasted by Groq</p>
+                     <p className="mt-6 text-sm italic text-primary">— Roasted by GitWrap</p>
                   </div>
                 </div>
               </WrappedCard>
