@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Header } from '@/components/header';
 import { AnimatedBackground } from '@/components/animated-background';
-import { ArrowLeft, Copy, Heart, Check, Shield } from 'lucide-react';
+import { ArrowLeft, Copy, Check, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
@@ -34,9 +34,8 @@ export default function SupportPage() {
       <AnimatedBackground />
 
       <Link href="/" className="absolute top-20 left-4 z-20 sm:top-4">
-        <Button variant="ghost">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Home
+        <Button variant="ghost" size="icon">
+          <ArrowLeft className="h-4 w-4" />
         </Button>
       </Link>
 
