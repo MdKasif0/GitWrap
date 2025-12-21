@@ -51,7 +51,7 @@ export default function Home() {
             href="https://gitroasted.netlify.app"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-6 inline-block rounded-lg border border-orange-600 bg-orange-500 px-6 py-3 text-lg font-bold text-black shadow-lg transition-transform hover:scale-105"
+            className="mt-6 text-xl font-bold transition-transform hover:scale-105 bg-gradient-to-r from-orange-500 via-pink-500 to-fuchsia-500 bg-clip-text text-transparent"
           >
             Try GitRoasted
           </a>
