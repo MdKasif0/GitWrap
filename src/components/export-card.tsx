@@ -9,6 +9,7 @@ import { Download, GitCommit, Code, Share2, Link as LinkIcon, Twitter, Star, Git
 import type { GitHubData } from "@/lib/github-api"
 import { Logo } from "./logo"
 import html2canvas from 'html2canvas';
+import Image from "next/image";
 
 
 type ExportCardProps = {
@@ -117,7 +118,7 @@ export function ExportCard({ data, roast, isModalVersion = false }: ExportCardPr
         ref={cardRef}
         className="w-full"
       >
-        <Card className="bg-gradient-to-br from-[#1E1C29] to-[#100E17] border-purple-500/20 shadow-2xl overflow-hidden">
+        <Card className="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-700 via-gray-900 to-black border-purple-500/20 shadow-2xl overflow-hidden">
           <CardContent className="flex flex-col gap-6 p-8 items-center text-center">
             
             <div className="flex flex-col items-center gap-2">
@@ -164,8 +165,8 @@ export function ExportCard({ data, roast, isModalVersion = false }: ExportCardPr
               </div>
             </div>
             <div className="flex items-center gap-2 text-muted-foreground text-sm pt-4">
-               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9.09 9.09.41 5.83 5.41-1.41"></path><path d="m14.91 14.91-.41-5.83-5.41 1.41"></path></svg>
-               <span>GitWrap</span>
+               <Image src="/gitwrap.png" alt="GitWrap Logo" width={16} height={16} />
+               <span className="font-bold text-primary">GitWrap</span>
             </div>
           </CardContent>
         </Card>
