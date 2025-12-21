@@ -13,7 +13,7 @@ function SubmitButton({ isPending }: { isPending: boolean }) {
     <Button 
       type="submit" 
       disabled={isPending} 
-      className="w-full rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] px-8 text-lg font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/50"
+      className="w-full rounded-full bg-gradient-to-r from-primary via-green-800 to-black px-8 text-lg font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-primary/50"
       size="lg"
     >
       {isPending ? (
