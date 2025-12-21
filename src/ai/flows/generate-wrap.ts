@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -143,7 +144,7 @@ export async function generateWrap(
   try {
     const chatCompletion = await groq.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],
-      model: 'qwen/qwen2-72b-instruct',
+      model: 'qwen/qwen3-32b',
       temperature: 0.8,
       response_format: { type: 'json_object' },
     });
