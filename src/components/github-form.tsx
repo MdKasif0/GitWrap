@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -63,7 +64,7 @@ export function GithubForm() {
       onSubmit={handleSubmit}
       className="w-full max-w-md flex flex-col gap-4"
     >
-      <div className="w-full rounded-full bg-white/10 p-1 text-white shadow-lg backdrop-blur-lg border border-white/20 focus-within:border-white/50 transition-all duration-300">
+      <div className="w-full rounded-full bg-white/10 p-1 text-white shadow-lg backdrop-blur-lg border border-transparent focus-within:border-white/50 transition-all duration-300">
         <Input
           name="username"
           type="text"
