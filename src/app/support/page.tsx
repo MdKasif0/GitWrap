@@ -6,21 +6,26 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Header } from '@/components/header';
 import { AnimatedBackground } from '@/components/animated-background';
-import { ArrowLeft, Copy } from 'lucide-react';
+import { ArrowLeft, Copy, Heart, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
+import { useState } from 'react';
 
 export default function SupportPage() {
   const { toast } = useToast();
+  const [copied, setCopied] = useState(false);
   const upiId = 'your-upi-id@fam';
+  const supporterCount = 137; // Static number for now
 
   const handleCopy = () => {
     navigator.clipboard.writeText(upiId);
+    setCopied(true);
     toast({
       title: 'Copied to clipboard!',
       description: `UPI ID: ${upiId}`,
     });
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -28,7 +33,7 @@ export default function SupportPage() {
       <Header />
       <AnimatedBackground />
 
-      <Link href="/" className="absolute top-4 left-4 z-20">
+      <Link href="/" className="absolute top-20 left-4 z-20 sm:top-4">
         <Button variant="ghost">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Home
@@ -39,7 +44,7 @@ export default function SupportPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="relative z-10 w-full max-w-[600px] rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-lg"
+        className="relative z-10 w-full max-w-[600px] rounded-2xl border border-white/10 bg-white/5 p-6 sm:p-8 shadow-2xl backdrop-blur-lg"
       >
         <div className="text-center">
           <div className="mb-6 text-6xl">☕</div>
@@ -59,8 +64,8 @@ export default function SupportPage() {
               <h2 className="text-lg font-semibold text-white">Copy UPI ID</h2>
               <div className="mt-4 flex items-center justify-between rounded-lg bg-black/30 p-3">
                 <span className="font-mono text-lg text-green-300">{upiId}</span>
-                <Button variant="ghost" size="icon" onClick={handleCopy}>
-                  <Copy className="h-5 w-5" />
+                <Button variant="ghost" size="icon" onClick={handleCopy} className="transition-all duration-300 hover:scale-110 hover:text-primary active:scale-95">
+                  {copied ? <Check className="h-5 w-5 text-green-400" /> : <Copy className="h-5 w-5" />}
                 </Button>
               </div>
             </CardContent>
@@ -86,6 +91,18 @@ export default function SupportPage() {
             </CardContent>
           </Card>
         </div>
+
+        <div className="mt-12 text-center">
+          <h2 className="text-2xl font-bold text-white">Every Coffee Counts!</h2>
+          <p className="mt-2 text-muted-foreground max-w-lg mx-auto">
+            Your support helps us dedicate more time to building awesome new features, maintaining the servers, and keeping GitWrap free for everyone.
+          </p>
+          <div className="mt-6 flex items-center justify-center gap-2 font-bold text-lg text-primary">
+            <Heart className="fill-current" />
+            <p>Join {supporterCount} other developers who have supported!</p>
+          </div>
+        </div>
+
       </motion.div>
     </main>
   );
