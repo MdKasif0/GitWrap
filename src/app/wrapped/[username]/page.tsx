@@ -78,7 +78,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
     repos: githubData.repoNames,
   });
 
-  const { roast, achievements } = aiData;
+  const { longRoast, shortRoast, achievements } = aiData;
   
   const topLangs = githubData.topLanguages.slice(0, 5);
 
@@ -345,7 +345,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
                 <div className="relative flex h-full flex-col items-center justify-center text-center">
                   <div className="relative w-full max-w-2xl md:max-w-3xl rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-lg">
                     <p className="absolute -top-8 left-4 text-8xl font-black text-primary/50">“</p>
-                    <p className="text-xl sm:text-2xl font-bold italic leading-relaxed text-white/90 text-left">{roast}</p>
+                    <p className="text-xl sm:text-2xl font-bold italic leading-relaxed text-white/90 text-left">{longRoast}</p>
                     <p className="absolute -bottom-8 right-4 text-8xl font-black text-primary/50">”</p>
                      <p className="mt-6 text-sm italic text-primary">— Roasted by GitWrap</p>
                   </div>
@@ -380,7 +380,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
                 <WrappedCard>
                     <div className="flex h-full flex-col items-center justify-center text-center">
                         <h2 className="text-3xl md:text-4xl font-bold mb-8">Share Your Wrap</h2>
-                        <ExportCard data={githubData} roast={roast} />
+                        <ExportCard data={githubData} roast={shortRoast} />
                     </div>
                 </WrappedCard>
             </CarouselItem>
@@ -403,7 +403,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
                 <DialogHeader>
                     <DialogTitle className="text-center text-white">Share Your Card</DialogTitle>
                 </DialogHeader>
-                <ExportCard data={githubData} roast={roast} isModalVersion={true} />
+                <ExportCard data={githubData} roast={shortRoast} isModalVersion={true} />
             </DialogContent>
           </Dialog>
           <div className="absolute bottom-6 left-6 z-20">

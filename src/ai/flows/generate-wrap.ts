@@ -44,10 +44,15 @@ const AchievementSchema = z.object({
 });
 
 const GenerateWrapOutputSchema = z.object({
-  roast: z
+  longRoast: z
     .string()
     .describe(
-      'A brutally honest, savage, and funny 2-3 line roast of the user based on their GitHub activity.'
+      'A brutally honest, savage, and funny roast of the user, approximately 35-45 words long, based on their GitHub activity for the main roast card.'
+    ),
+  shortRoast: z
+    .string()
+    .describe(
+      'A brutally honest, savage, and funny roast of the user, approximately 15-20 words long, for the smaller shareable card.'
     ),
   achievements: z
     .array(AchievementSchema)
@@ -60,7 +65,8 @@ export type GenerateWrapOutput = z.infer<typeof GenerateWrapOutputSchema>;
 function buildPrompt(input: GenerateWrapInput): string {
   const schemaString = JSON.stringify(
     {
-      roast: 'string',
+      longRoast: 'string (35-45 words)',
+      shortRoast: 'string (15-20 words)',
       achievements: [
         {
           icon: "'Trophy' | 'Flame' | 'BrainCircuit' | 'GitPullRequest' | 'Rocket' | 'Code'",
@@ -89,9 +95,11 @@ User Data:
 - Repository Names: ${JSON.stringify(input.repos)}
 
 ROAST GUIDELINES:
-- Generate a "roast": An unfiltered, brutally honest, and savage 2-3 line roast.
+- Generate a "longRoast": An unfiltered, brutally honest, and savage roast of 35-45 words for a large display card.
+- Generate a "shortRoast": A concise, witty, and savage roast of 15-20 words for a smaller, shareable card.
 - Use programming humor and technical references to highlight their flaws.
-- Example: "${input.contributionCount} contributions? I've seen more activity in a commented-out block of code."
+- Example Long Roast: "${input.contributionCount} contributions? I've seen more activity in a commented-out block of legacy code. Your GitHub graph looks less like a developer's and more like a flatline, with occasional blips of 'Initial commit' and 'fix typo'."
+- Example Short Roast: "With ${input.commitCount} commits, you've successfully proven that even with version control, some mistakes are permanent."
 
 ACHIEVEMENT GUIDELINES:
 - Generate an "achievements" array with exactly 4 unique objects.
@@ -104,8 +112,9 @@ Return ONLY the raw JSON object. Do not wrap it in markdown or any other text.
 
 async function fallbackResponse(): Promise<GenerateWrapOutput> {
     return {
-        roast:
-          "My AI is too scared to roast you. You must be a 10x developer... or you have an empty GitHub profile. One of the two.",
+        longRoast:
+          "My AI is too scared to roast you. You must be a 10x developer... or you have an empty GitHub profile. One of the two. Your code is either flawless or nonexistent, and frankly, I'm too afraid to find out which.",
+        shortRoast: "Your GitHub activity is so minimal, my AI thought it was a vacation calendar. Impressive, in its own way.",
         achievements: [
           {
             icon: 'Trophy',
@@ -161,7 +170,7 @@ export async function generateWrap(
     let parsedJson = JSON.parse(content);
 
     // Defensive parsing: find the actual data if it's nested
-    if (parsedJson.roast === undefined || parsedJson.achievements === undefined) {
+    if (parsedJson.longRoast === undefined || parsedJson.achievements === undefined) {
       const keys = Object.keys(parsedJson);
       if (keys.length === 1 && typeof parsedJson[keys[0]] === 'object') {
         parsedJson = parsedJson[keys[0]]; // Assume the data is nested under the single key
