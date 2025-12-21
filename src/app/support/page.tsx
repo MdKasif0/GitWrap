@@ -15,7 +15,7 @@ import { Separator } from '@/components/ui/separator';
 export default function SupportPage() {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
-  const upiId = 'your-upi-id@fam';
+  const upiId = 'mdkasifuddin@fam';
 
   const handleCopy = () => {
     navigator.clipboard.writeText(upiId);
@@ -75,7 +75,7 @@ export default function SupportPage() {
               <p className="text-sm text-muted-foreground">Scan with any UPI app</p>
               <div className="mt-4 flex justify-center">
                 <Image
-                  src="https://placehold.co/300x300/png?text=Your+QR+Code"
+                  src="/fam-qrcode.png"
                   alt="UPI QR Code"
                   width={300}
                   height={300}
