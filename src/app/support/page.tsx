@@ -6,11 +6,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Header } from '@/components/header';
 import { AnimatedBackground } from '@/components/animated-background';
-import { ArrowLeft, Copy, Heart, Check } from 'lucide-react';
+import { ArrowLeft, Copy, Heart, Check, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
 import { useState } from 'react';
+import { Separator } from '@/components/ui/separator';
 
 export default function SupportPage() {
   const { toast } = useToast();
@@ -101,6 +102,18 @@ export default function SupportPage() {
             <Heart className="fill-current" />
             <p>Join {supporterCount} other developers who have supported!</p>
           </div>
+        </div>
+        
+        <Separator className="my-8 bg-white/10" />
+
+        <div className="text-center text-xs text-muted-foreground">
+            <div className="flex items-center justify-center gap-2 mb-2">
+                <Shield className="h-4 w-4" />
+                <h3 className="font-semibold text-white">Secure & Private</h3>
+            </div>
+            <p className="max-w-md mx-auto">
+                Payments are processed directly through your UPI app. GitWrap does not handle or store any payment information. No personal data is collected during this process.
+            </p>
         </div>
 
       </motion.div>
