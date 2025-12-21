@@ -8,6 +8,7 @@ import { SeriousnessIcon } from "@/components/icons/seriousness-icon";
 import { ShareIcon } from "@/components/icons/share-icon";
 import Image from "next/image";
 import { Header } from "@/components/header";
+import { GiftIcon } from "@/components/icons/gift-icon";
 
 export default function Home() {
   const features = [
@@ -40,8 +41,8 @@ export default function Home() {
       <div className="z-10 flex w-full max-w-4xl flex-col items-center space-y-16">
         <div className="flex flex-col items-center space-y-4 text-center">
           <div className="relative">
-            <h1 className="text-6xl font-bold tracking-tight bg-gradient-to-br from-green-300 via-primary to-green-600 bg-clip-text text-transparent sm:text-8xl">
-              GitHub Wrapped <span className="text-4xl sm:text-6xl">🎁</span>
+            <h1 className="text-6xl font-bold tracking-tight bg-gradient-to-br from-green-300 via-primary to-green-600 bg-clip-text text-transparent sm:text-8xl flex items-center gap-4">
+              GitHub Wrapped <GiftIcon className="text-4xl sm:text-6xl text-primary" />
             </h1>
              <div className="absolute -top-4 -left-8 sm:-top-5 sm:-left-12 text-sm sm:text-base font-bold bg-white/20 text-white px-3 py-1 rounded-full backdrop-blur-sm -rotate-12">
               2025
