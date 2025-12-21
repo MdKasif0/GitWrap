@@ -8,7 +8,7 @@ export function ShareButton() {
   const { toast } = useToast();
 
   const handleShare = async () => {
-    const shareUrl = window.location.href;
+    const shareUrl = window.location.origin;
     const shareText = `Check out GitWrap 2025 and get your personalized GitHub year in review! 🚀 #GitWrap2025`;
 
     if (navigator.share) {

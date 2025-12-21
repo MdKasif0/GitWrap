@@ -1,7 +1,7 @@
 import { Button } from "./ui/button";
 import { Logo } from "./logo";
 import Link from "next/link";
-import { Coffee, Share2 } from "lucide-react";
+import { Coffee } from "lucide-react";
 import { ShareButton } from "./share-button";
 
 export function Header() {
@@ -17,7 +17,6 @@ export function Header() {
             </span>
           </Link>
         </Button>
-        <ShareButton />
       </div>
     </header>
   );
