@@ -34,7 +34,7 @@ export default function Home() {
   ];
 
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-start overflow-hidden bg-background p-4 pt-24">
+    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-background p-4 pt-24">
       <Header />
       <AnimatedBackground />
       <div className="z-10 flex w-full max-w-4xl flex-col items-center space-y-16">

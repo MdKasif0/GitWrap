@@ -19,7 +19,7 @@ export function Logo({ className }: { className?: string }) {
         <path d="m9.09 9.09.41 5.83 5.41-1.41" />
         <path d="m14.91 14.91-.41-5.83-5.41 1.41" />
       </svg>
-      <span className="bg-gradient-to-br from-white to-neutral-400 bg-clip-text text-3xl text-transparent">GitHub Wrapped</span>
+      <span className="bg-gradient-to-br from-white to-neutral-400 bg-clip-text text-3xl text-transparent">GitWrap</span>
     </div>
   );
 }
