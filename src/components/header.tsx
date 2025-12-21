@@ -2,7 +2,6 @@ import { Button } from "./ui/button";
 import { Logo } from "./logo";
 import Link from "next/link";
 import { Coffee } from "lucide-react";
-import { ShareButton } from "./share-button";
 
 export function Header() {
   return (
@@ -13,7 +12,7 @@ export function Header() {
           <Link href="/support" aria-label="Support page">
             <Coffee className="text-primary" />
             <span className="ml-2 bg-gradient-to-r from-green-400 to-primary bg-clip-text text-transparent font-semibold">
-              Buy me a Coffee
+              Support
             </span>
           </Link>
         </Button>
