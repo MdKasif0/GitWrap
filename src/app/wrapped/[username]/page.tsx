@@ -1,11 +1,5 @@
 
-
-
-
-
-
-
-
+import type { Metadata } from 'next';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { fetchGitHubData } from "@/lib/github-api";
 import { Award, Code, Flame, GitCommit, GitMerge, Sparkles, Star, Milestone, CalendarDays, TrendingUp, Github, Languages, ArrowLeft, ArrowRight, Share2, X, Pause, ChevronDown, CheckCircle, GitPullRequest, Trophy, BrainCircuit, Rocket, ChevronLeft, ChevronRight, GitFork, Users } from "lucide-react";
@@ -25,6 +19,34 @@ import { ContributionHeatmap } from "@/components/contribution-heatmap";
 import { AchievementCard } from "@/components/achievement-card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Download, Link as LinkIcon, Twitter } from 'lucide-react';
+
+
+export async function generateMetadata({ params }: { params: { username: string } }): Promise<Metadata> {
+  const username = params.username;
+  // NOTE: In a real app, you might fetch minimal data here to populate the description
+  // For now, we'll use a template.
+  const description = `Check out ${username}'s GitHub Wrapped 2025! See their coding stats, top languages, contribution streaks, and more.`;
+  return {
+    title: `${username}'s GitHub Wrapped 2025 | GitWrap`,
+    description: description,
+    alternates: {
+      canonical: `https://gitwrap.com/wrapped/${username}`, // Replace with your actual domain
+    },
+    openGraph: {
+        title: `${username}'s GitHub Wrapped 2025`,
+        description: description,
+        // You could dynamically generate an Open Graph image for each user here
+        images: [
+            {
+                url: '/og-gitwrap.png', // Fallback image
+                width: 1200,
+                height: 630,
+                alt: `GitWrap card for ${username}`,
+            },
+        ],
+    },
+  };
+}
 
 
 export default async function WrappedPage({ params }: { params: { username: string } }) {
