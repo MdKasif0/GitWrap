@@ -143,7 +143,7 @@ export async function generateWrap(
   try {
     const chatCompletion = await groq.chat.completions.create({
       messages: [{ role: 'user', content: prompt }],
-      model: 'llama3-8b-8192', // Or another model like 'mixtral-8x7b-32768'
+      model: 'qwen/qwen2-72b-instruct',
       temperature: 0.8,
       response_format: { type: 'json_object' },
     });
