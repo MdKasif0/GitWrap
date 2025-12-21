@@ -1,5 +1,5 @@
+
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 type AchievementCardProps = {
@@ -17,6 +17,13 @@ const rarityStyles = {
   Common: 'border-gray-400/50 bg-gray-900/20 text-gray-400',
 };
 
+const rarityBadgeStyles = {
+    Legendary: 'bg-yellow-500/10 text-yellow-300 border-yellow-500/50',
+    Epic: 'bg-purple-500/10 text-purple-300 border-purple-500/50',
+    Rare: 'bg-blue-500/10 text-blue-300 border-blue-500/50',
+    Common: 'bg-gray-500/10 text-gray-300 border-gray-500/50',
+};
+
 const glowStyles = {
     yellow: 'shadow-[0_0_20px_0] shadow-yellow-500/30',
     purple: 'shadow-[0_0_20px_0] shadow-purple-500/30',
@@ -27,22 +34,22 @@ const glowStyles = {
 export function AchievementCard({ icon, title, description, rarity, color }: AchievementCardProps) {
   return (
     <div className={cn(
-        "relative rounded-xl border p-3 sm:p-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg h-full flex flex-col justify-between",
+        "relative rounded-xl border p-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between",
         rarityStyles[rarity],
         glowStyles[color]
     )}>
       <div>
-        <div className="flex items-start gap-3 mb-2">
-          <div className="flex-shrink-0 [&>svg]:size-4 mt-1">
+        <div className="flex items-start gap-4 mb-2">
+          <div className="flex-shrink-0 text-white [&>svg]:size-5 mt-1">
               {icon}
           </div>
           <div>
             <h3 className="text-base font-bold text-white leading-tight">{title}</h3>
-            <p className="text-xs text-muted-foreground mt-1">{description}</p>
+            <p className="text-sm text-white/70 mt-1">{description}</p>
           </div>
         </div>
       </div>
-      <Badge variant="outline" className={cn("mt-2 border-none text-xs w-min", rarityStyles[rarity])}>
+      <Badge variant="outline" className={cn("mt-2 text-xs w-min", rarityBadgeStyles[rarity])}>
         {rarity}
       </Badge>
     </div>
