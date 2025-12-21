@@ -37,6 +37,20 @@ const nextConfig: NextConfig = {
       }
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/coffee',
+        destination: '/support',
+        permanent: true,
+      },
+      {
+        source: '/donate',
+        destination: '/support',
+        permanent: true,
+      },
+    ]
+  },
 };
 
 export default withPWA({
