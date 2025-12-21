@@ -5,7 +5,6 @@ import { AnimatedBackground } from "@/components/animated-background";
 import { FeatureCard } from "@/components/feature-card";
 import { StatsIcon } from "@/components/icons/stats-icon";
 import { AchievementsIcon } from "@/components/icons/achievements-icon";
-import { SeriousnessIcon } from "@/components/icons/seriousness-icon";
 import { ShareIcon } from "@/components/icons/share-icon";
 import Image from "next/image";
 import { Header } from "@/components/header";
@@ -21,11 +20,6 @@ export default function Home() {
       icon: <AchievementsIcon />,
       title: "Achievements",
       description: "Unlock badges for milestones and rare coding feats.",
-    },
-    {
-      icon: <SeriousnessIcon />,
-      title: "Seriousness / 1000",
-      description: "How serious was your coding this year? Find your score.",
     },
     {
       icon: <ShareIcon />,
@@ -114,7 +108,7 @@ export default function Home() {
           </a>
         </div>
         <GithubForm />
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 w-full">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 w-full">
           {features.map((feature, i) => (
             <FeatureCard key={i} {...feature} />
           ))}
