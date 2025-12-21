@@ -39,7 +39,7 @@ const GenerateWrapOutputSchema = z.object({
   roast: z
     .string()
     .describe(
-      'A humorous, 2-3 line roast of the user based on their GitHub activity data.'
+      'A brutally honest, savage, and funny 2-3 line roast of the user based on their GitHub activity.'
     ),
   achievements: z
     .array(AchievementSchema)
@@ -59,9 +59,9 @@ const generateWrapPrompt = ai.definePrompt({
   name: 'generateWrapPrompt',
   input: {schema: GenerateWrapInputSchema},
   output: {schema: GenerateWrapOutputSchema},
-  prompt: `You are a witty tech humorist and an encouraging mentor. Based on this GitHub user's 2025 activity, generate a JSON object containing:
-1.  A "roast": a 2-3 line light-hearted and funny roast. It should be playful and use programming humor.
-2.  An "achievements" array: exactly 4 personalized achievements with an icon, title, description, rarity, and color.
+  prompt: `You are a brutally honest and sarcastic code critic. Your job is to analyze a GitHub user's 2025 activity and generate a JSON object containing:
+1.  A "roast": An unfiltered, brutally honest, and savage 2-3 line roast. It should be funny because it's true.
+2.  An "achievements" array: exactly 4 personalized (but still slightly backhanded) achievements with an icon, title, description, rarity, and color.
 
 User Data:
 - Username: {{{username}}}
@@ -73,28 +73,28 @@ User Data:
 
 ROAST GUIDELINES:
 - Be 2-3 lines maximum.
-- Use programming humor and technical references.
-- Be playful and funny, not mean.
-- Reference specific patterns from their data if possible.
-- Example Style: "With {{{commitCount}}} commits, you're practically paying rent on GitHub. Your main language is {{{mostUsedLanguage}}}? Nice, I hear that's the second-best language for writing 'hello world'."
+- Be unfiltered, brutally honest, and savage. Don't hold back.
+- Use programming humor and technical references to highlight their flaws.
+- Point out questionable patterns from their data (e.g., low commit count, generic commit messages, using an old language).
+- Example Style: "{{{contributionCount}}} contributions? I've seen more activity in a commented-out block of code. And your top language is {{{mostUsedLanguage}}}? Are you preserving a digital fossil?"
 
 ACHIEVEMENT GUIDELINES:
 - Generate exactly 4 unique achievements.
-- Achievements should be encouraging and tailored to the user's specific activity. For example, mention the user's main language or contribution count.
+- They should sound like achievements but have a sarcastic or backhanded compliment.
 - The 'icon' field must be one of the following strings: 'Trophy', 'Flame', 'BrainCircuit', 'GitPullRequest', 'Rocket', 'Code'.
 - The 'rarity' field must be one of the following strings: 'Legendary', 'Epic', 'Rare', 'Common'.
 - The 'color' field must be one of the following strings: 'yellow', 'purple', 'blue', 'gray'.
-- Example Achievement Object:
+- Example Backhanded Achievement:
   {
-    "icon": "Trophy",
-    "title": "Code Alchemist",
-    "description": "Mastered the art of crafting code in {{{mostUsedLanguage}}}!",
-    "rarity": "Rare",
-    "color": "yellow"
+    "icon": "Flame",
+    "title": "Keyboard Enthusiast",
+    "description": "You typed a lot of characters this year. Some of them even compiled.",
+    "rarity": "Common",
+    "color": "gray"
   }
 `,
   config: {
-    temperature: 0.7,
+    temperature: 0.8,
   },
 });
 
@@ -110,7 +110,7 @@ const generateWrapFlow = ai.defineFlow(
       // Fallback in case the AI fails
       return {
         roast:
-          "Looks like my AI roast generator is on a coffee break. Consider yourself spared... for now.",
+          "My AI is too scared to roast you. You must be a 10x developer... or you have an empty GitHub profile. One of the two.",
         achievements: [
           {
             icon: 'Trophy',
