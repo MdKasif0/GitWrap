@@ -58,9 +58,27 @@ const GenerateWrapOutputSchema = z.object({
 export type GenerateWrapOutput = z.infer<typeof GenerateWrapOutputSchema>;
 
 function buildPrompt(input: GenerateWrapInput): string {
-  return `You are a brutally honest and sarcastic code critic. Your job is to analyze a GitHub user's 2025 activity and generate a JSON object containing:
-1.  A "roast": An unfiltered, brutally honest, and savage 2-3 line roast. It should be funny because it's true.
-2.  An "achievements" array: exactly 4 personalized (but still slightly backhanded) achievements with an icon, title, description, rarity, and color.
+  const schemaString = JSON.stringify(
+    {
+      roast: 'string',
+      achievements: [
+        {
+          icon: "'Trophy' | 'Flame' | 'BrainCircuit' | 'GitPullRequest' | 'Rocket' | 'Code'",
+          title: 'string',
+          description: 'string',
+          rarity: "'Legendary' | 'Epic' | 'Rare' | 'Common'",
+          color: "'yellow' | 'purple' | 'blue' | 'gray'",
+        },
+      ],
+    },
+    null,
+    2
+  );
+
+  return `You are a brutally honest and sarcastic code critic. Your job is to analyze a GitHub user's 2025 activity and generate a JSON object.
+
+Your response MUST be a single, valid JSON object and nothing else. The JSON object must conform to the following structure:
+${schemaString}
 
 User Data:
 - Username: ${input.username}
@@ -70,32 +88,17 @@ User Data:
 - Recent Commit Messages: ${JSON.stringify(input.commitMessages)}
 - Repository Names: ${JSON.stringify(input.repos)}
 
-Your response MUST be a valid JSON object that conforms to this Zod schema:
-${JSON.stringify(GenerateWrapOutputSchema.shape, null, 2)}
-
 ROAST GUIDELINES:
-- Be 2-3 lines maximum.
-- Be unfiltered, brutally honest, and savage. Don't hold back.
+- Generate a "roast": An unfiltered, brutally honest, and savage 2-3 line roast.
 - Use programming humor and technical references to highlight their flaws.
-- Point out questionable patterns from their data (e.g., low commit count, generic commit messages, using an old language).
-- Example Style: "${input.contributionCount} contributions? I've seen more activity in a commented-out block of code. And your top language is ${input.mostUsedLanguage}? Are you preserving a digital fossil?"
+- Example: "${input.contributionCount} contributions? I've seen more activity in a commented-out block of code."
 
 ACHIEVEMENT GUIDELINES:
-- Generate exactly 4 unique achievements.
+- Generate an "achievements" array with exactly 4 unique objects.
 - They should sound like achievements but have a sarcastic or backhanded compliment.
-- The 'icon' field must be one of the following strings: 'Trophy', 'Flame', 'BrainCircuit', 'GitPullRequest', 'Rocket', 'Code'.
-- The 'rarity' field must be one of the following strings: 'Legendary', 'Epic', 'Rare', 'Common'.
-- The 'color' field must be one of the following strings: 'yellow', 'purple', 'blue', 'gray'.
-- Example Backhanded Achievement:
-  {
-    "icon": "Flame",
-    "title": "Keyboard Enthusiast",
-    "description": "You typed a lot of characters this year. Some of them even compiled.",
-    "rarity": "Common",
-    "color": "gray"
-  }
+- Example: { "icon": "Flame", "title": "Keyboard Enthusiast", "description": "You typed a lot of characters. Some of them even compiled.", "rarity": "Common", "color": "gray" }
 
-Return ONLY the JSON object, with no other text before or after it.
+Return ONLY the raw JSON object. Do not wrap it in markdown or any other text.
 `;
 }
 
@@ -155,11 +158,20 @@ export async function generateWrap(
       return fallbackResponse();
     }
     
-    const parsedOutput = JSON.parse(content);
-    const validationResult = GenerateWrapOutputSchema.safeParse(parsedOutput);
+    let parsedJson = JSON.parse(content);
+
+    // Defensive parsing: find the actual data if it's nested
+    if (parsedJson.roast === undefined || parsedJson.achievements === undefined) {
+      const keys = Object.keys(parsedJson);
+      if (keys.length === 1 && typeof parsedJson[keys[0]] === 'object') {
+        parsedJson = parsedJson[keys[0]]; // Assume the data is nested under the single key
+      }
+    }
+
+    const validationResult = GenerateWrapOutputSchema.safeParse(parsedJson);
 
     if (!validationResult.success) {
-        console.error('Groq response failed Zod validation:', validationResult.error);
+        console.error('Groq response failed Zod validation after parsing:', validationResult.error);
         return fallbackResponse();
     }
     
@@ -182,7 +194,7 @@ export async function generateWrap(
     return output;
 
   } catch (error) {
-    console.error('Error calling Groq API:', error);
+    console.error('Error calling Groq API or parsing response:', error);
     return fallbackResponse();
   }
 }
