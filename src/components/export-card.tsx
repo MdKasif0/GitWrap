@@ -123,7 +123,7 @@ export function ExportCard({ data, roast, isModalVersion = false }: ExportCardPr
           <CardContent className="flex flex-col gap-6 p-8 items-center text-center">
             
             <div className="flex flex-col items-center gap-2">
-              <Avatar className="h-24 w-24 border-4 border-primary/50">
+              <Avatar className="h-24 w-24 border-4 border-green-400/50">
                 <AvatarImage src={data.avatarUrl} alt={data.name} data-ai-hint="person portrait" />
                 <AvatarFallback>{data.name.charAt(0)}</AvatarFallback>
               </Avatar>
@@ -165,8 +165,7 @@ export function ExportCard({ data, roast, isModalVersion = false }: ExportCardPr
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-muted-foreground text-sm pt-4">
-               <Image src="/gitwrap.png" alt="GitWrap Logo" width={16} height={16} />
+            <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm pt-4">
                <span className="font-bold text-primary">GitWrap</span>
             </div>
           </CardContent>
