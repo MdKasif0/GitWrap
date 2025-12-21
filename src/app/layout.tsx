@@ -8,6 +8,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 export const metadata: Metadata = {
   title: 'GitWrap',
   description: 'Your year in code, wrapped.',
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({
