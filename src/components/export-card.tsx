@@ -119,11 +119,11 @@ export function ExportCard({ data, roast, isModalVersion = false }: ExportCardPr
         ref={cardRef}
         className="w-full"
       >
-        <Card className="bg-black border-purple-500/20 shadow-2xl">
+        <Card className="bg-black border-primary/20 shadow-2xl">
           <CardContent className="flex flex-col gap-6 p-8 items-center text-center">
             
             <div className="flex flex-col items-center gap-2">
-              <Avatar className="h-24 w-24 border-4 border-purple-500/50">
+              <Avatar className="h-24 w-24 border-4 border-primary/50">
                 <AvatarImage src={data.avatarUrl} alt={data.name} data-ai-hint="person portrait" />
                 <AvatarFallback>{data.name.charAt(0)}</AvatarFallback>
               </Avatar>
@@ -216,3 +216,5 @@ export function ExportCard({ data, roast, isModalVersion = false }: ExportCardPr
     </div>
   )
 }
+
+    

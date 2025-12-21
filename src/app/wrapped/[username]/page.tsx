@@ -399,7 +399,7 @@ export default async function WrappedPage({ params }: { params: { username: stri
                   <Share2 />
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px] bg-[#1C1C1C] border-purple-500/20">
+            <DialogContent className="sm:max-w-[425px] bg-[#1C1C1C] border-primary/20">
                 <DialogHeader>
                     <DialogTitle className="text-center text-white">Share Your Card</DialogTitle>
                 </DialogHeader>
@@ -417,3 +417,5 @@ export default async function WrappedPage({ params }: { params: { username: stri
     </>
   );
 }
+
+    
