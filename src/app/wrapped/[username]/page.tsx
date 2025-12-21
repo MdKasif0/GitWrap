@@ -286,10 +286,14 @@ export default async function WrappedPage({ params }: { params: { username: stri
                   </div>
                 </div>
 
-                <div className="mt-8">
-                    <p className="text-3xl font-bold">
-                        <NumberTicker value={githubData.currentStreak} />
-                    </p>
+                <div className="mt-8 flex items-center justify-center gap-3">
+                    <Flame className="size-8 text-orange-400" />
+                    <div>
+                        <p className="text-3xl font-bold">
+                            <NumberTicker value={githubData.currentStreak} />
+                        </p>
+                        <p className="text-sm text-muted-foreground">Current Streak</p>
+                    </div>
                 </div>
 
                 <p className="mt-8 text-lg text-foreground/80 max-w-sm">
